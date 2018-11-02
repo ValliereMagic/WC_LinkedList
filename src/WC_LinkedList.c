@@ -5,26 +5,30 @@
 
 //List node
 typedef struct node_t {
+    
     //value that the node holds.
     void* value;
     
     //bytes of memory value takes up.
     size_t value_length;
     
-    //type of the element stored.
-    element_type_t e_type;
-    
     //next node in the list.
     struct node_t* next;
+
 } node_t;
 
 //List
 typedef struct linked_list_t {
+    
     //front node of the list.
     node_t* head;
     
     //number of nodes in the list.
     size_t length;
+
+    //type of the element stored.
+    element_type_t e_type;
+
 } linked_list_t;
 
 /*
@@ -33,7 +37,9 @@ typedef struct linked_list_t {
 
 //function for freeing a single node.
 void node_free(node_t* node_to_free) {
+    
     if (node_to_free != NULL && node_to_free->value != NULL) {
+        
         free(node_to_free->value);
         free(node_to_free);
     
@@ -44,6 +50,7 @@ void node_free(node_t* node_to_free) {
 
 //function for allocating memory for a new list element's value.
 void* allocate_element(void* value, size_t obj_length) {
+    
     //allocate memory required for new element.
     void* new_list_element = malloc(obj_length);
 
@@ -59,6 +66,7 @@ void* allocate_element(void* value, size_t obj_length) {
 
 //free a linked list from memory.
 void linked_list_free(linked_list_t* list_to_free) {
+    
     if (list_to_free != NULL) {
         
         node_t* list_head = list_to_free->head;
@@ -71,6 +79,7 @@ void linked_list_free(linked_list_t* list_to_free) {
             //save the next one in the list
             //so it can be freed next.
             temp_node = list_head->next;
+            
             //free the current one.
             node_free(list_head);
 
@@ -83,24 +92,30 @@ void linked_list_free(linked_list_t* list_to_free) {
         free(list_to_free);
 
     } else {
+        
         fprintf(stderr, "Error. Attempting to free null linked list.\n");
     }
 }
 
 //create a new empty linked list.
-linked_list_t* linked_list_new(void) {
+linked_list_t* linked_list_new(element_type_t type) {
+    
     //allocate memory required for a new list
     linked_list_t* new_list = malloc(sizeof(linked_list_t));
+    
     new_list->head = NULL;
     new_list->length = 0;
+    new_list->e_type = type;
+    
     return new_list;
 }
 
 //add a new element to the list.
-int linked_list_add(linked_list_t* list, void* value, element_type_t type, size_t obj_length) {
+int linked_list_add(linked_list_t* list, void* value, size_t obj_length) {
 
     //make sure the passed list exists.
     if (list != NULL) {
+        
         //create a new node to add to the list.
         node_t* new_node = malloc(sizeof(node_t));
     
@@ -109,9 +124,6 @@ int linked_list_add(linked_list_t* list, void* value, element_type_t type, size_
 
         //set the length of the element stored into the node.
         new_node->value_length = obj_length;
-        
-        //set the type of element stored into the node.
-        new_node->e_type = type;
 
         //this will be the last node in the list.
         new_node->next = NULL;
@@ -155,6 +167,7 @@ int linked_list_add(linked_list_t* list, void* value, element_type_t type, size_
         
     
     } else {
+        
         fprintf(stderr, "Error. attempting to add an element to a NULL Linked List\n");
         
         //return that the addition failed.
