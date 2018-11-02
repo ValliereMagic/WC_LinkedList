@@ -66,7 +66,7 @@ void linked_list_free(linked_list_t* list_to_free) {
 
         //free every node in the list.
         node_t* temp_node;
-        for (int i = 0; i < list_size; i++) {
+        for (int i = 0; i < list_size - 1; i++) {
             
             //save the next one in the list
             //so it can be freed next.
@@ -77,6 +77,7 @@ void linked_list_free(linked_list_t* list_to_free) {
             //move on to the next node.
             list_head = temp_node;
         }
+
         //free the list itself after all nodes
         //freed.
         free(list_to_free);
@@ -105,7 +106,7 @@ int linked_list_add(linked_list_t* list, void* value, element_type_t type, size_
     
         //allocate a new container to hold the element value passed.
         new_node->value = allocate_element(value, obj_length);
-    
+
         //set the length of the element stored into the node.
         new_node->value_length = obj_length;
         
@@ -138,7 +139,7 @@ int linked_list_add(linked_list_t* list, void* value, element_type_t type, size_
             size_t list_length = list->length;
 
             //iterate to the last node in the list.
-            for (int i = 0; i < list_length; i++) {
+            for (int i = 0; i < list_length - 1; i++) {
                 current = current->next;
             }
 
