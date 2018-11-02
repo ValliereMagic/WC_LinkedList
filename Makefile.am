@@ -30,4 +30,4 @@ libWC_linkedlist_la_LDFLAGS = -version-info 1:0:0 -no-undefined
 libWC_linkedlist_la_LIBADD = @WC_sodium_flags@
 
 #Install linked list headers
-include_HEADERS = src/WC_linkedlist.h
+include_HEADERS = src/WC_Linkedlist.h
