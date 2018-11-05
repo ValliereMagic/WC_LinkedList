@@ -111,7 +111,7 @@ linked_list_t* linked_list_new(element_type_t type) {
 }
 
 //add a new element to the list.
-int linked_list_add(linked_list_t* list, void* value, size_t obj_length) {
+unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_length) {
 
     //make sure the passed list exists.
     if (list != NULL) {
@@ -176,16 +176,15 @@ int linked_list_add(linked_list_t* list, void* value, size_t obj_length) {
 }
 
 //remove an element from the list at an index
-//NOT CURRENTLY WORKING AT INDEX 0. IF INDEX 0 IS PASSED, INDEX 1 WILL BE REMOVED.
-int linked_list_remove_at(linked_list_t* list, int index) {
+unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index) {
 
     //make sure list exists.
     if (list != NULL) {
 
-        int max_index_value = list->length - 1;
+        unsigned int max_index_value = list->length - 1;
 
         //make sure that the index is within the size of the list.
-        if (index < max_index_value) {
+        if (index <= max_index_value) {
 
             node_t* list_head = list->head;
 
@@ -193,6 +192,9 @@ int linked_list_remove_at(linked_list_t* list, int index) {
             if (list_head != NULL) {
                 
                 //handle removing from list with 1 element.
+                //It is implied that index is also 0, because
+                //index cannot be less than 0; and index is 
+                //less than or equal to max_index_value.
                 if (max_index_value == 0) {
                     
                     //free only element in the list.
@@ -202,7 +204,23 @@ int linked_list_remove_at(linked_list_t* list, int index) {
 
                     //return removal success. List is now empty.
                     return 1;
+                
+                //Removing the first element in the list
+                //when the list has more than one element.
+                } else if (index == 0) {
+                    
+                    //replace the head with the next element in the list.
+                    list->head = list_head->next;
+
+                    //free the head element.
+                    free(list_head);
+
+                    //return that the removal was successful.
+                    return 1;
                 }
+
+                //index must be > 0 and <= max_index_value
+                //for code below this comment to execute.
 
                 //iterate to the element before the one to be removed.
                 for (int i = 0; i < index - 1; i++) {
