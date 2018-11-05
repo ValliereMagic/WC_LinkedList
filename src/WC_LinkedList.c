@@ -174,3 +174,80 @@ int linked_list_add(linked_list_t* list, void* value, size_t obj_length) {
         return 0;
     }
 }
+
+//remove an element from the list at an index
+//NOT CURRENTLY WORKING AT INDEX 0. IF INDEX 0 IS PASSED, INDEX 1 WILL BE REMOVED.
+int linked_list_remove_at(linked_list_t* list, int index) {
+
+    //make sure list exists.
+    if (list != NULL) {
+
+        int max_index_value = list->length - 1;
+
+        //make sure that the index is within the size of the list.
+        if (index < max_index_value) {
+
+            node_t* list_head = list->head;
+
+            //make sure that the list isn't empty.
+            if (list_head != NULL) {
+                
+                //handle removing from list with 1 element.
+                if (max_index_value == 0) {
+                    
+                    //free only element in the list.
+                    node_free(list_head);
+                    
+                    list->head = NULL;
+
+                    //return removal success. List is now empty.
+                    return 1;
+                }
+
+                //iterate to the element before the one to be removed.
+                for (int i = 0; i < index - 1; i++) {
+
+                    //iterate to the next node in the list.
+                    list_head = list_head->next;
+
+                }
+
+                //now at the element infront of the one to remove.
+                node_t* node_to_free = list_head->next;
+
+                //jump over the element to remove (removing it from the list).
+                list_head->next = node_to_free->next;
+
+                //free node that was removed.
+                node_free(node_to_free);
+
+                //return that the removal was successful.
+                return 1;
+
+            } else {
+
+                fprintf(stderr, "Error. Attempting to remove values from an empty list.");
+
+                return 0;
+            }
+
+        } else {
+            
+            fprintf(stderr, "Error. Attempting to remove at an index out of bounds.\n");
+
+            return 0;
+        }
+
+    } else {
+        
+        fprintf(stderr, "Error. Attempting to remove a value from a NULL list.\n");
+
+        return 0;
+    }
+
+}
+
+//remove an element from the list using a value
+int linked_list_remove_value() {
+
+}
