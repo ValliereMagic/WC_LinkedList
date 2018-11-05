@@ -26,10 +26,10 @@
 
     //add an element to the linked_list, obj_length is how many bytes the element passed is.
     //make sure that obj_length includes the null terminator if value is a string.
-    int linked_list_add(linked_list_t* list, void* value, size_t obj_length);
+    unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_length);
 
     //remove an element from the list using an index.
     //will return 1 on success. 0 Otherwise. (NULL list passed, out of bounds, empty list, etc.)
-    int linked_list_remove_at(linked_list_t* list, int index);
+    unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index);
 
 #endif
