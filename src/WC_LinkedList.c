@@ -141,22 +141,18 @@ unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_lengt
             //return that the addition was successful.
             return 1;
         
+        //list has at least one element
         } else {
             
-            //copy head to a current instance to make sure
-            //the list stays intact.
-            node_t* current = list->head;
+            //save the element at the head of the list.
+            node_t* temp_head = list->head;
 
-            //length of the list so far.
-            size_t list_length = list->length;
+            //add the new node to the front of the list.
+            list->head = new_node;
 
-            //iterate to the last node in the list.
-            for (int i = 0; i < list_length - 1; i++) {
-                current = current->next;
-            }
-
-            //add the new node onto the end of the list.
-            current->next = new_node;
+            //append the rest of the list onto the new
+            //list head added.
+            new_node->next = temp_head;
 
             //increment the list size.
             list->length++;
