@@ -1,10 +1,20 @@
 #include <stdio.h>
 #include "WC_LinkedList.h"
 
+void test_remove_with_value(linked_list_t* list) {
+
+    printf("//Attempting to remove an element from the list by value\\\\\n");
+
+    printf("Successful?: %d\n", linked_list_remove_value(list, "HELLO", 6));
+}
+
 void test_remove_at_index(linked_list_t* list) {
     
     printf("//Removing the element at index 13\\\\\n");
+    
     printf("Successful?: %d\n", linked_list_remove_at(list, 13));
+
+    test_remove_with_value(list);
 }
 
 void test_add_string_element(linked_list_t* list) {

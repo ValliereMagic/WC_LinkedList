@@ -32,4 +32,8 @@
     //will return 1 on success. 0 Otherwise. (NULL list passed, out of bounds, empty list, etc.)
     unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index);
 
+    //remove an element from the list using a value stored in it.
+    //will return 1 on success. 0 Otherwise.
+    int linked_list_remove_value(linked_list_t* list, void* value, size_t obj_length);
+
 #endif
