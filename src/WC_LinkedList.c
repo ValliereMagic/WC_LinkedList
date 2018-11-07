@@ -46,6 +46,7 @@ void node_free(node_t* node_to_free) {
     }
         
     free(node_to_free->value);
+    
     free(node_to_free);
 }
 
@@ -132,7 +133,9 @@ linked_list_t* linked_list_new(element_type_t type) {
     linked_list_t* new_list = malloc(sizeof(linked_list_t));
     
     new_list->head = NULL;
+    
     new_list->length = 0;
+    
     new_list->e_type = type;
     
     return new_list;

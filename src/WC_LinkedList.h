@@ -10,9 +10,7 @@
     *   WC_LINKEDLIST_OBJ: something else is stored. (could be whatever you want!).
     */
     typedef enum element_type_t {
-
         WC_LINKEDLIST_INT, WC_LINKEDLIST_DOUBLE, WC_LINKEDLIST_STRING, WC_LINKEDLIST_OBJ
-
     } element_type_t;
 
     //define linked_list type (forward declared).
