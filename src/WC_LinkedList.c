@@ -323,11 +323,11 @@ int linked_list_remove_value(linked_list_t* list, void* value, size_t obj_length
             //equality not at first element.
             } else {
             
-            //jump over current element.
-            previous->next = current->next;
-            
-            //free the node to remove.
-            node_free(current);
+                //jump over current element.
+                previous->next = current->next;
+                
+                //free the node to remove.
+                node_free(current);
             }
 
             //decrement list length.
@@ -346,4 +346,129 @@ int linked_list_remove_value(linked_list_t* list, void* value, size_t obj_length
     //element was not found in the list.
     //return that removal failed.
     return 0;
+}
+
+//print out a list to the console.
+void linked_list_print(linked_list_t* list) {
+
+    //cannot print a NULL list.
+    if (list == NULL) {
+        
+        fprintf(stderr, "Error. Attempting to print out a NULL linked list.\n");
+
+        return;
+    }
+
+    //make copy of front of list for iteration.
+    node_t* current = list->head;   
+    
+    //retrieve linked list size
+    size_t list_size = list->length;
+
+    //print out the list based
+    //on the type of elements stored.
+    switch (list->e_type) {
+        
+        case WC_LINKEDLIST_INT: {
+
+            for (int i = 0; i < list_size; i++) {
+                
+                //print out the integer value stored.
+                printf("%d", *(int*)current->value);
+
+                //add comma for every element
+                //except the last one.
+                if (i < list_size - 1) {
+                    
+                    printf("%c ", ',');
+                }
+
+                //go to the next element in the list.
+                current = current->next;
+            }
+            
+            break;
+        }
+
+        case WC_LINKEDLIST_DOUBLE: {
+
+            for (int i = 0; i < list_size; i++) {
+
+                //print out the double value stored.
+                printf("%f", *(double*)current->value);
+
+                //add comma for every element
+                //except the last one.
+                if (i < list_size - 1) {
+                    
+                    printf("%c ", ',');
+                }
+
+                //go to the next element in the list.
+                current = current->next;
+            }
+            
+            break;
+        }
+
+        case WC_LINKEDLIST_STRING: {
+            
+            for (int i = 0; i < list_size; i++) {
+
+                //print out the string value stored.
+                printf("%s", (char*)current->value);
+
+                //add comma for every element
+                //except the last one.
+                if (i < list_size - 1) {
+                    
+                    printf("%c ", ',');
+                }
+                //go to the next element in the list.
+                current = current->next;
+            }
+            
+            break;
+        }
+
+        case WC_LINKEDLIST_OBJ: {
+            
+            for (int i = 0; i < list_size; i++) {
+
+                //pull can caste bytes of element.
+                char* current_value_bytes = current->value;
+                
+                size_t current_value_length = current->value_length;
+                
+                //print out each of the bytes in the value.
+                //(As Hex)
+                for (int i = 0; i < current_value_length; i++) {
+
+                    //only put colons between hex values.
+                    //not at the front or end elements.
+                    if (i > 0 && i < current_value_length - 1) {
+                        
+                        printf(":");
+                    }
+
+                    //print the current byte in the iteration
+                    printf("02X", current_value_bytes[i]);
+                }
+
+                //add comma for every element
+                //except the last one.
+                if (i < list_size - 1) {
+                    
+                    printf("%c ", ',');
+                }
+
+                //go to the next element in the list.
+                current = current->next;
+            }
+
+            break;
+        }
+    }
+
+    printf("\n");
 }
