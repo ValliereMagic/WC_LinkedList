@@ -452,7 +452,7 @@ void linked_list_print(linked_list_t* list) {
                     }
 
                     //print the current byte in the iteration
-                    printf("02X", current_value_bytes[i]);
+                    printf("%02x", (unsigned char)current_value_bytes[i]);
                 }
 
                 //add comma for every element
