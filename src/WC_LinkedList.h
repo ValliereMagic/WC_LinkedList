@@ -34,4 +34,7 @@
     //will return 1 on success. 0 Otherwise.
     int linked_list_remove_value(linked_list_t* list, void* value, size_t obj_length);
 
+    //print out all of the elements of a linked list.
+    //will print out the hex values for a list of type WC_LINKEDLIST_OBJ
+    void linked_list_print(linked_list_t* list);
 #endif
