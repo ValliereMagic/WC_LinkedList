@@ -348,6 +348,107 @@ int linked_list_remove_value(linked_list_t* list, void* value, size_t obj_length
     return 0;
 }
 
+/*
+* START private print functions
+*/
+
+void print_int(node_t* list_head, size_t length) {
+
+    for (int i = 0; i < length; i++) {
+        
+        //print out the integer value stored.
+        printf("%d", *(int*)list_head->value);
+
+        //add comma for every element
+        //except the last one.
+        if (i < length - 1) {
+            
+            printf("%c ", ',');
+        }
+
+        //go to the next element in the list.
+        list_head = list_head->next;
+    }
+}
+
+void print_double(node_t* list_head, size_t length) {
+
+    for (int i = 0; i < length; i++) {
+
+        //print out the double value stored.
+        printf("%f", *(double*)list_head->value);
+
+        //add comma for every element
+        //except the last one.
+        if (i < length - 1) {
+            
+            printf("%c ", ',');
+        }
+
+        //go to the next element in the list.
+        list_head = list_head->next;
+    }
+}
+
+void print_string(node_t* list_head, size_t length) {
+
+    for (int i = 0; i < length; i++) {
+
+        //print out the string value stored.
+        printf("%s", (char*)list_head->value);
+
+        //add comma for every element
+        //except the last one.
+        if (i < length - 1) {
+            
+            printf("%c ", ',');
+        }
+        //go to the next element in the list.
+        list_head = list_head->next;
+    }
+}
+
+void print_obj(node_t* list_head, size_t length) {
+
+    for (int i = 0; i < length; i++) {
+
+        //pull and caste bytes of element.
+        char* current_value_bytes = list_head->value;
+        
+        //determine length of element (how many bytes)
+        size_t current_value_length = list_head->value_length;
+        
+        //print out each of the bytes in the value.
+        //(As Hex)
+        for (int i = 0; i < current_value_length; i++) {
+
+            //only put colons between hex values.
+            //not at the front or end elements.
+            if (i > 0 && i < current_value_length - 1) {
+                
+                printf(":");
+            }
+
+            //print the current byte in the iteration
+            printf("%02x", (unsigned char)current_value_bytes[i]);
+        }
+
+        //add comma for every element
+        //except the last one.
+        if (i < length - 1) {
+            
+            printf("%c ", ',');
+        }
+
+        //go to the next element in the list.
+        list_head = list_head->next;
+    }
+}
+
+/*
+* END private print functions
+*/
+
 //print out a list to the console.
 void linked_list_print(linked_list_t* list) {
 
@@ -370,102 +471,26 @@ void linked_list_print(linked_list_t* list) {
     switch (list->e_type) {
         
         case WC_LINKEDLIST_INT: {
-
-            for (int i = 0; i < list_size; i++) {
-                
-                //print out the integer value stored.
-                printf("%d", *(int*)current->value);
-
-                //add comma for every element
-                //except the last one.
-                if (i < list_size - 1) {
-                    
-                    printf("%c ", ',');
-                }
-
-                //go to the next element in the list.
-                current = current->next;
-            }
             
+            print_int(current, list_size);
             break;
         }
 
         case WC_LINKEDLIST_DOUBLE: {
 
-            for (int i = 0; i < list_size; i++) {
-
-                //print out the double value stored.
-                printf("%f", *(double*)current->value);
-
-                //add comma for every element
-                //except the last one.
-                if (i < list_size - 1) {
-                    
-                    printf("%c ", ',');
-                }
-
-                //go to the next element in the list.
-                current = current->next;
-            }
-            
+            print_double(current, list_size);
             break;
         }
 
         case WC_LINKEDLIST_STRING: {
-            
-            for (int i = 0; i < list_size; i++) {
 
-                //print out the string value stored.
-                printf("%s", (char*)current->value);
-
-                //add comma for every element
-                //except the last one.
-                if (i < list_size - 1) {
-                    
-                    printf("%c ", ',');
-                }
-                //go to the next element in the list.
-                current = current->next;
-            }
-            
+            print_string(current, list_size);
             break;
         }
 
         case WC_LINKEDLIST_OBJ: {
             
-            for (int i = 0; i < list_size; i++) {
-
-                //pull can caste bytes of element.
-                char* current_value_bytes = current->value;
-                
-                size_t current_value_length = current->value_length;
-                
-                //print out each of the bytes in the value.
-                //(As Hex)
-                for (int i = 0; i < current_value_length; i++) {
-
-                    //only put colons between hex values.
-                    //not at the front or end elements.
-                    if (i > 0 && i < current_value_length - 1) {
-                        
-                        printf(":");
-                    }
-
-                    //print the current byte in the iteration
-                    printf("%02x", (unsigned char)current_value_bytes[i]);
-                }
-
-                //add comma for every element
-                //except the last one.
-                if (i < list_size - 1) {
-                    
-                    printf("%c ", ',');
-                }
-
-                //go to the next element in the list.
-                current = current->next;
-            }
-
+            print_obj(current, list_size);
             break;
         }
     }
