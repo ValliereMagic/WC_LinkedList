@@ -1,58 +1,75 @@
 #include <stdio.h>
+#include <string.h>
 #include "WC_LinkedList.h"
 
-void test_remove_with_value(linked_list_t* list) {
+void modify_string_list(linked_list_t* str_list) {
 
-    printf("//Attempting to remove an element from the list by value\\\\\n");
+    printf("\nAdding 10 duplicate string elements to the list...\n");
 
-    printf("Successful?: %d\n", linked_list_remove_value(list, "HELLO", 6));
+    char random_string[] = "HELLO LIST";
 
-    linked_list_print(list);
-}
+    for (int i = 0; i < 10; i++) {
 
-void test_remove_at_index(linked_list_t* list) {
-    
-    printf("//Removing the element at index 13\\\\\n");
-    
-    printf("Successful?: %d\n", linked_list_remove_at(list, 2));
-
-    linked_list_print(list);
-
-    test_remove_with_value(list);
-}
-
-void test_add_string_element(linked_list_t* list) {
-    
-    printf("//Adding some elements to a list\\\\\n");
-    
-    for (int i = 0; i < 5; i++) {
-        
-        linked_list_add(list, "HELLO", 6);
+        linked_list_add(str_list, random_string, strlen(random_string) + 1);
     }
 
-    linked_list_print(list);
+    printf("Elements added. State of list:\n");
 
-    test_remove_at_index(list);
-}
+    linked_list_print(str_list);
 
-void test_allocate_deallocate(void) {
     
-    printf("//Creating new Linked List\\\\\n");
-    
-    linked_list_t* new_list = linked_list_new(WC_LINKEDLIST_STRING);
+    printf("\nTesting removal of element by index...\n");
 
-    test_add_string_element(new_list);
+    unsigned char success = linked_list_remove_at(str_list, 4);
 
-    printf("//Freeing newly allocated Linked List\\\\\n");
+    printf("Status of element removal: %d.\nState of list:\n", success);
+
+    linked_list_print(str_list);
+
     
-    linked_list_free(new_list);
+    printf("\nTesting removal of element by value...\n");
+
+    success = linked_list_remove_value(str_list, random_string, 
+                                                     strlen(random_string) + 1);
+
+    printf("Status of element removal: %d.\nState of list:\n", success);
+
+    linked_list_print(str_list);
 }
 
 int main(void) {
     
-    printf("Hello LinkedList\n");
+    printf("Testing the creation of linked list of each type...\n");
 
-    test_allocate_deallocate();
+    linked_list_t* arb_list = linked_list_new(WC_LINKEDLIST_OBJ);
     
+    linked_list_t* int_list = linked_list_new(WC_LINKEDLIST_INT);
+
+    linked_list_t* doub_list = linked_list_new(WC_LINKEDLIST_DOUBLE);
+
+    linked_list_t* string_list = linked_list_new(WC_LINKEDLIST_STRING);
+
+    printf("Creation completed.\n");
+
+
+    printf("\nTesting string list...\n");
+
+    modify_string_list(string_list);
+
+    printf("String list tests completed.\n");
+
+
+    printf("\nFreeing linked lists...\n");
+
+    linked_list_free(arb_list);
+
+    linked_list_free(int_list);
+
+    linked_list_free(doub_list);
+
+    linked_list_free(string_list);
+
+    printf("Lists freed.\n");
+
     return 0;
 }
