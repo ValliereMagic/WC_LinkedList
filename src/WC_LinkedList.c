@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <string.h>
 #include "WC_LinkedList.h"
 
@@ -96,7 +97,7 @@ unsigned char is_floating_point_element_equal(double* value_one, double* value_t
     //allowed inaccuracy
     double epsilon = 0.00001;
 
-    return (abs(*value_one - *value_two) < epsilon);
+    return (fabs(*value_one - *value_two) < epsilon);
 }
 
 /*
