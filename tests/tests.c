@@ -106,6 +106,41 @@ void modify_double_list(linked_list_t* doub_list) {
 
 }
 
+void modify_arb_list(linked_list_t* arb_list) {
+
+    printf("\nAdding some bytes to the list...\n");
+
+    unsigned char someBytes[] = {3, 56, 112, 45, 128};
+
+    for (int i = 0; i < 15; i++) {
+
+        linked_list_add(arb_list, someBytes, sizeof(unsigned char) * 5);
+    }
+
+    printf("Elements added.\nStatus of list:\n");
+
+    linked_list_print(arb_list);
+
+
+    printf("\nRemoving a byte array from the list by index...\n");
+
+    unsigned char success = linked_list_remove_at(arb_list, 12);
+
+    printf("Status of element removal: %d.\nStatus of list:\n", success);
+
+    linked_list_print(arb_list);
+
+
+    printf("\nRemoving a byte array from the list by value...\n");
+
+    success = linked_list_remove_value(arb_list, someBytes, 
+                                       sizeof(unsigned char) * 5);
+
+    printf("Status of element removal: %d.\nStatus of list:\n", success);
+
+    linked_list_print(arb_list);
+}
+
 int main(void) {
     
     printf("Testing the creation of linked list of each type...\n");
@@ -140,6 +175,13 @@ int main(void) {
     modify_double_list(doub_list);
 
     printf("Double list tests completed.\n");
+
+
+    printf("\nTesting arbitrary value list...\n");
+
+    modify_arb_list(arb_list);
+
+    printf("Arbitrary list tests completed.\n");
 
 
     printf("\nFreeing linked lists...\n");
