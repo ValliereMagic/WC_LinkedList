@@ -52,7 +52,7 @@ void node_free(node_t* node_to_free) {
 
 //function for allocating memory for a new list element's value.
 void* allocate_element(void* value, size_t obj_length) {
-    
+
     //allocate memory required for new element.
     void* new_list_element = malloc(obj_length);
 
@@ -87,6 +87,16 @@ unsigned char is_element_equal(char* value_one, size_t value_one_length, char* v
 
     //elements are equal.
     return 1;
+}
+
+//one if the elements are equal,
+//0 otherwise.
+unsigned char is_floating_point_element_equal(double* value_one, double* value_two) {
+
+    //allowed inaccuracy
+    double epsilon = 0.00001;
+
+    return (abs(*value_one - *value_two) < epsilon);
 }
 
 /*
@@ -152,7 +162,16 @@ unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_lengt
         //return that the addition failed.
         return 0;
     }
-        
+
+    //make sure a null value is not being added to the list.
+    if (value == NULL) {
+
+        fprintf(stderr, "Error. attempting to add a NULL element to a list.\n");
+
+        //return that the addition failed.
+        return 0;
+    }
+
     //create a new node to add to the list.
     node_t* new_node = malloc(sizeof(node_t));
 
@@ -299,17 +318,42 @@ int linked_list_remove_value(linked_list_t* list, void* value, size_t obj_length
         return 0;
     }
 
+    //make sure not attempting to remove a NULL value from the list.
+    if (value == NULL) {
+
+        fprintf(stderr, "Error. Attempting to remove a NULL value from the list.\n");
+
+        return 0;
+    }
+
     //used for removal when removing element not at index 0.
     node_t* previous = NULL;
     
     //retrieve length of list.
     int list_length = list->length;
 
+    //retrieve type of list.
+    element_type_t list_type = list->e_type;
+
     //look through all of the elements in the list.
     for (int i = 0; i < list_length; i++) {
 
-        //find an equal element, if one exists.
-        if (is_element_equal(value, obj_length, current->value, current->value_length)) {
+        //check for an element in the list equal to the
+        //value passed.
+        unsigned char equal;
+        
+        //handle equality for floating point numbers.
+        if (list_type == WC_LINKEDLIST_DOUBLE) {
+
+            equal = is_floating_point_element_equal(current->value, value);
+        
+        } else {
+
+            equal = is_element_equal(value, obj_length, current->value, current->value_length);
+        }
+
+        //If an equal element is discovered, remove it.
+        if (equal) {
             
             //equal to the first element in the list
             if (previous == NULL) {
