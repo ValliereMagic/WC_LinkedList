@@ -137,7 +137,8 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libWC_linkedlist_la_DEPENDENCIES =
 am__dirstamp = $(am__leading_dot)dirstamp
-am_libWC_linkedlist_la_OBJECTS = src/WC_LinkedList.lo
+am_libWC_linkedlist_la_OBJECTS =  \
+	src/libWC_linkedlist_la-WC_LinkedList.lo
 libWC_linkedlist_la_OBJECTS = $(am_libWC_linkedlist_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -145,8 +146,8 @@ am__v_lt_0 = --silent
 am__v_lt_1 = 
 libWC_linkedlist_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
-	$(AM_CFLAGS) $(CFLAGS) $(libWC_linkedlist_la_LDFLAGS) \
-	$(LDFLAGS) -o $@
+	$(libWC_linkedlist_la_CFLAGS) $(CFLAGS) \
+	$(libWC_linkedlist_la_LDFLAGS) $(LDFLAGS) -o $@
 am_list_tests_OBJECTS = tests/list_tests-tests.$(OBJEXT)
 list_tests_OBJECTS = $(am_list_tests_OBJECTS)
 list_tests_DEPENDENCIES = libWC_linkedlist.la
@@ -168,7 +169,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = src/$(DEPDIR)/WC_LinkedList.Plo \
+am__depfiles_remade =  \
+	src/$(DEPDIR)/libWC_linkedlist_la-WC_LinkedList.Plo \
 	tests/$(DEPDIR)/list_tests-tests.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
@@ -375,7 +377,7 @@ list_tests_SOURCES = \
 #Tests CFlags
 
 #include linkedlist header file
-list_tests_CFLAGS = -I./src/
+list_tests_CFLAGS = -I./src/ -Wall -Wextra
 
 #Link tests to Linked list
 list_tests_LDADD = libWC_linkedlist.la
@@ -388,6 +390,9 @@ libWC_linkedlist_la_SOURCES = \
     src/WC_LinkedList.h \
     src/WC_LinkedList.c
 
+
+#Linkedlist CFlags
+libWC_linkedlist_la_CFLAGS = -Wall -Wextra
 
 #Linkedlist Version
 libWC_linkedlist_la_LDFLAGS = -version-info 1:0:0 -no-undefined
@@ -497,7 +502,7 @@ src/$(am__dirstamp):
 src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/$(DEPDIR)
 	@: > src/$(DEPDIR)/$(am__dirstamp)
-src/WC_LinkedList.lo: src/$(am__dirstamp) \
+src/libWC_linkedlist_la-WC_LinkedList.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 
 libWC_linkedlist.la: $(libWC_linkedlist_la_OBJECTS) $(libWC_linkedlist_la_DEPENDENCIES) $(EXTRA_libWC_linkedlist_la_DEPENDENCIES) 
@@ -524,7 +529,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/WC_LinkedList.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/libWC_linkedlist_la-WC_LinkedList.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/list_tests-tests.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -556,6 +561,13 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
+
+src/libWC_linkedlist_la-WC_LinkedList.lo: src/WC_LinkedList.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libWC_linkedlist_la_CFLAGS) $(CFLAGS) -MT src/libWC_linkedlist_la-WC_LinkedList.lo -MD -MP -MF src/$(DEPDIR)/libWC_linkedlist_la-WC_LinkedList.Tpo -c -o src/libWC_linkedlist_la-WC_LinkedList.lo `test -f 'src/WC_LinkedList.c' || echo '$(srcdir)/'`src/WC_LinkedList.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/libWC_linkedlist_la-WC_LinkedList.Tpo src/$(DEPDIR)/libWC_linkedlist_la-WC_LinkedList.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/WC_LinkedList.c' object='src/libWC_linkedlist_la-WC_LinkedList.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libWC_linkedlist_la_CFLAGS) $(CFLAGS) -c -o src/libWC_linkedlist_la-WC_LinkedList.lo `test -f 'src/WC_LinkedList.c' || echo '$(srcdir)/'`src/WC_LinkedList.c
 
 tests/list_tests-tests.o: tests/tests.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(list_tests_CFLAGS) $(CFLAGS) -MT tests/list_tests-tests.o -MD -MP -MF tests/$(DEPDIR)/list_tests-tests.Tpo -c -o tests/list_tests-tests.o `test -f 'tests/tests.c' || echo '$(srcdir)/'`tests/tests.c
@@ -876,7 +888,7 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libLTLIBRARIES \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-		-rm -f src/$(DEPDIR)/WC_LinkedList.Plo
+		-rm -f src/$(DEPDIR)/libWC_linkedlist_la-WC_LinkedList.Plo
 	-rm -f tests/$(DEPDIR)/list_tests-tests.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -925,7 +937,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-		-rm -f src/$(DEPDIR)/WC_LinkedList.Plo
+		-rm -f src/$(DEPDIR)/libWC_linkedlist_la-WC_LinkedList.Plo
 	-rm -f tests/$(DEPDIR)/list_tests-tests.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
