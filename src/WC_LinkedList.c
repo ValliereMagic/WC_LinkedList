@@ -77,7 +77,7 @@ unsigned char is_element_equal(char* value_one, size_t value_one_length, char* v
 
     //check each byte of value_one and value_two
     //to see if they are equal.
-    for (int i = 0; i < value_one_length; i++) {
+    for (size_t i = 0; i < value_one_length; i++) {
         
         //if one byte isn't equal, the elements aren't equal.
         if (value_one[i] != value_two[i]) {
@@ -273,7 +273,7 @@ unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index) {
         //for code below this comment to execute.
 
         //iterate to the element before the one to be removed.
-        for (int i = 0; i < index - 1; i++) {
+        for (unsigned int i = 0; i < index - 1; i++) {
 
             //iterate to the next node in the list.
             list_head = list_head->next;
@@ -399,7 +399,7 @@ int linked_list_remove_value(linked_list_t* list, void* value, size_t obj_length
 
 void print_int(node_t* list_head, size_t length) {
 
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
         
         //print out the integer value stored.
         printf("%d", *(int*)list_head->value);
@@ -418,7 +418,7 @@ void print_int(node_t* list_head, size_t length) {
 
 void print_double(node_t* list_head, size_t length) {
 
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
 
         //print out the double value stored.
         printf("%f", *(double*)list_head->value);
@@ -437,7 +437,7 @@ void print_double(node_t* list_head, size_t length) {
 
 void print_string(node_t* list_head, size_t length) {
 
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
 
         //print out the string value stored.
         printf("%s", (char*)list_head->value);
@@ -455,7 +455,7 @@ void print_string(node_t* list_head, size_t length) {
 
 void print_obj(node_t* list_head, size_t length) {
 
-    for (int i = 0; i < length; i++) {
+    for (size_t i = 0; i < length; i++) {
 
         //pull and caste bytes of element.
         char* current_value_bytes = list_head->value;
@@ -465,7 +465,7 @@ void print_obj(node_t* list_head, size_t length) {
         
         //print out each of the bytes in the value.
         //(As Hex)
-        for (int i = 0; i < current_value_length; i++) {
+        for (size_t i = 0; i < current_value_length; i++) {
 
             //only put colons between hex values.
             //not at the front or end elements.

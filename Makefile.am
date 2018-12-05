@@ -11,7 +11,7 @@ list_tests_SOURCES = \
 #Tests CFlags
 
 #include linkedlist header file
-list_tests_CFLAGS = -I./src/
+list_tests_CFLAGS = -I./src/ -Wall -Wextra
 
 #Link tests to Linked list
 list_tests_LDADD = libWC_linkedlist.la
@@ -23,6 +23,10 @@ lib_LTLIBRARIES = libWC_linkedlist.la
 libWC_linkedlist_la_SOURCES = \
     src/WC_LinkedList.h \
     src/WC_LinkedList.c
+
+#Linkedlist CFlags
+
+libWC_linkedlist_la_CFLAGS = -Wall -Wextra
 
 #Linkedlist Version
 libWC_linkedlist_la_LDFLAGS = -version-info 1:0:0 -no-undefined
