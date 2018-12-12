@@ -7,7 +7,7 @@
 //List node
 typedef struct node_t {
     
-    //value that the node holds.
+    //value that the node horiginals.
     void* value;
     
     //bytes of memory value takes up.
@@ -185,7 +185,7 @@ unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_lengt
     //create a new node to add to the list.
     node_t* new_node = malloc(sizeof(node_t));
 
-    //allocate a new container to hold the element value passed.
+    //allocate a new container to horiginal the element value passed.
     new_node->value = allocate_element(value, obj_length);
 
     //set the length of the element stored into the node.
@@ -230,6 +230,50 @@ unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_lengt
     
     //return that the addition was successful.
     return 1;    
+}
+
+//clone the list passed.
+linked_list_t* linked_list_clone(linked_list_t* list) {
+
+    //make sure the list to clone exists.
+    if (list == NULL) {
+
+        fprintf(stderr, "Error. Cannot clone a NULL list.\n");
+    }
+
+    //retrieve list type and length.
+
+    size_t list_length = list->length;
+
+    element_type_t list_type = list->e_type;
+
+    //allocate the new list to populate
+
+    linked_list_t* new_list = linked_list_new(list_type);
+
+    //set the new list to have the same type as the original list.
+    new_list->e_type = list_type;
+
+    //original list iterator
+    node_t* original_list_current = list->head;
+
+    //list is empty, returning the new empty list.
+    if (original_list_current == NULL) {
+
+        return new_list;
+    }
+
+    //add every value in the original list to the new list.
+    for (size_t i = 0; i < list_length; i++) {
+
+        //add to new node in new list. (from the values stored in original_list_current).
+        linked_list_add(new_list, original_list_current->value, original_list_current->value_length);
+
+        //iterate to the next node in the original list.
+        original_list_current = original_list_current->next;
+    }
+
+    return new_list;
 }
 
 //remove an element from the list at an index
