@@ -23,6 +23,9 @@ typedef struct linked_list_t {
     
     //front node of the list.
     node_t* head;
+
+    //end of the list
+    node_t* tail;
     
     //number of nodes in the list.
     size_t length;
@@ -115,10 +118,12 @@ void linked_list_free(linked_list_t* list_to_free) {
     }
         
     node_t* list_head = list_to_free->head;
+    
     int list_size = list_to_free->length;
 
     //free every node in the list.
     node_t* temp_node;
+    
     for (int i = 0; i < list_size; i++) {
         
         //save the next one in the list
@@ -143,7 +148,11 @@ linked_list_t* linked_list_new(element_type_t type) {
     //allocate memory required for a new list
     linked_list_t* new_list = malloc(sizeof(linked_list_t));
     
+    //set list properties to default values
+
     new_list->head = NULL;
+
+    new_list->tail = NULL;
     
     new_list->length = 0;
     
@@ -190,19 +199,29 @@ unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_lengt
         
         //set head to the new created list node.
         list->head = new_node;
+
+        //set the tail to the new head
+        list->tail = new_node;
         
     //list has at least one element
     } else {
+
+        //make a copy of the list tail
+        //to make sure not null
+        node_t* list_tail = list->tail;
+
+        //make sure the tail exists before
+        //attempting to dereference tail->next
+        if (list_tail == NULL) {
+            
+            fprintf(stderr, "Error. the tail of the list is NULL.\n");
+        }
         
-        //save the element at the head of the list.
-        node_t* temp_head = list->head;
+        //set the new tail of the list
+        list_tail->next = new_node;
 
-        //add the new node to the front of the list.
-        list->head = new_node;
-
-        //append the rest of the list onto the new
-        //list head added.
-        new_node->next = temp_head;
+        //update the tail node
+        list->tail = list_tail->next;
     }
 
     //add one to the list length, as an element
@@ -458,7 +477,7 @@ void print_obj(node_t* list_head, size_t length) {
     for (size_t i = 0; i < length; i++) {
 
         //pull and caste bytes of element.
-        char* current_value_bytes = list_head->value;
+        unsigned char* current_value_bytes = list_head->value;
         
         //determine length of element (how many bytes)
         size_t current_value_length = list_head->value_length;
@@ -475,7 +494,7 @@ void print_obj(node_t* list_head, size_t length) {
             }
 
             //print the current byte in the iteration
-            printf("%02x", (unsigned char)current_value_bytes[i]);
+            printf("%02x", current_value_bytes[i]);
         }
 
         //add comma for every element
