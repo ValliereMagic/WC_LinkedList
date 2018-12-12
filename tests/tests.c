@@ -139,6 +139,18 @@ void modify_arb_list(linked_list_t* arb_list) {
     printf("Status of element removal: %d.\nStatus of list:\n", success);
 
     linked_list_print(arb_list);
+
+    printf("Cloning the arbitrary list.\n");
+
+    linked_list_t* cloned_arb_list = linked_list_clone(arb_list);
+
+    printf("Printing the cloned list:\n");
+
+    linked_list_print(cloned_arb_list);
+
+    printf("Freeing the cloned list:\n");
+
+    linked_list_free(cloned_arb_list);
 }
 
 int main(void) {

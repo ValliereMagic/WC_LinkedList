@@ -26,6 +26,9 @@
     //make sure that obj_length includes the null terminator if value is a string.
     unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_length);
 
+    //clone the list passed and return. Returned list must be freed using linked_list_free.
+    linked_list_t* linked_list_clone(linked_list_t* list);
+
     //remove an element from the list using an index.
     //will return 1 on success. 0 Otherwise. (NULL list passed, out of bounds, empty list, etc.)
     unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index);
