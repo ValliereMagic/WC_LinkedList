@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include "WC_LinkedList.h"
+#include "sodium.h"
 
 //List node
 typedef struct node_t {
@@ -103,6 +104,38 @@ unsigned char is_floating_point_element_equal(double* value_one, double* value_t
     return (fabs(*value_one - *value_two) < epsilon);
 }
 
+//retrieve the node_t at an index in the list
+//will return NULL on failure.
+node_t* linked_list_get_node(linked_list_t* list, unsigned int index) {
+
+    //make sure the list exists.
+    if (list == NULL) {
+
+        fprintf(stderr, "Error, attempting to retrieve a node from a NULL linked list.\n");
+
+        return NULL;
+    }
+
+    //make sure that the index is within the bounds of the list.
+    if (index > list->length) {
+
+        fprintf(stderr, "Error. Attempting to get element from an index out of bounds.\n");
+        
+        return NULL;
+    }
+
+    //retrieve head of list for iteration
+    node_t* list_iterator = list->head;
+
+    //jump to the node at the index specified.
+    for (unsigned int i = 0; i < index; i++) {
+
+        list_iterator = list_iterator->next;
+    }
+
+    return list_iterator;
+}
+
 /*
 * Public Functions
 */
@@ -147,6 +180,14 @@ linked_list_t* linked_list_new(element_type_t type) {
     
     //allocate memory required for a new list
     linked_list_t* new_list = malloc(sizeof(linked_list_t));
+
+    //make sure that the list allocation was successful.
+    if (new_list == NULL) {
+
+        fprintf(stderr, "Error. Allocation of a new Linked List failed. System may be out of memory.\n");
+
+        return NULL;
+    }
     
     //set list properties to default values
 
@@ -185,8 +226,18 @@ unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_lengt
     //create a new node to add to the list.
     node_t* new_node = malloc(sizeof(node_t));
 
-    //allocate a new container to horiginal the element value passed.
-    new_node->value = allocate_element(value, obj_length);
+    //allocate a new container for the original value passed.
+    void* new_value = allocate_element(value, obj_length);
+
+    //make sure that allocation was successful.
+    if (new_value == NULL) {
+
+        fprintf(stderr, "Error. System out of memory, allocating a new element failed.\n");
+        
+        return 0;
+    }
+
+    new_node->value = new_value;
 
     //set the length of the element stored into the node.
     new_node->value_length = obj_length;
@@ -230,6 +281,71 @@ unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_lengt
     
     //return that the addition was successful.
     return 1;    
+}
+
+//Get the value at the passed index of the list
+//returns NULL on failure.
+//item within list_value_t is a valid pointer in the list.
+//make sure that if the data it points to is to be manipulated
+//that the data is cloned to a local variable first.
+list_value_t linked_list_get(linked_list_t* list, unsigned int index) {
+
+    //initialize value in case element_to_retrieve is NULL.
+    list_value_t value_to_return;
+
+    value_to_return.item_length = 0;
+    
+    value_to_return.item = NULL;
+
+    //get the element at the index specified.
+    node_t* element_to_retrieve = linked_list_get_node(list, index);
+
+    //list may be null, or maybe index out of bounds.
+    if (element_to_retrieve == NULL) {
+
+        return value_to_return;
+    }
+
+    //copy the values into the return object.
+    value_to_return.item_length = element_to_retrieve->value_length;
+
+    value_to_return.item = element_to_retrieve->value;
+
+    return value_to_return;
+}
+
+//change a value in a node to another value.
+unsigned char linked_list_set(linked_list_t* list, unsigned int index, void* value, size_t obj_length) {
+
+    node_t* list_element_to_modify = linked_list_get_node(list, index);
+
+    //list could be NULL, or index could be out of bounds.
+    if (list_element_to_modify == NULL) {
+
+        return 0;
+    }
+
+    //make a copy of the element's value pointer to manipulate.
+    void* list_element_value = list_element_to_modify->value;
+
+    //reallocate the value in the element to the right size
+    list_element_value = realloc(list_element_value, obj_length);
+
+    //if the memory reallocation fails
+    //don't modify the list, and return unsuccessful.
+    if (list_element_value == NULL) {
+
+        return 0;
+    }
+
+    //copy in the new value
+    memcpy(list_element_value, value, obj_length);
+
+    list_element_to_modify->value = list_element_value;
+
+    list_element_to_modify->value_length = obj_length;
+
+    return 1;
 }
 
 //clone the list passed.
@@ -335,12 +451,13 @@ unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index) {
         //index must be > 0 and <= max_index_value
         //for code below this comment to execute.
 
-        //iterate to the element before the one to be removed.
-        for (unsigned int i = 0; i < index - 1; i++) {
+        //get the element before the one to be removed.
+        list_head = linked_list_get_node(list, index - 1);
 
-            //iterate to the next node in the list.
-            list_head = list_head->next;
+        //get_node must have failed...
+        if (list_head == NULL) {
 
+            return 0;
         }
 
         //now at the element infront of the one to remove.

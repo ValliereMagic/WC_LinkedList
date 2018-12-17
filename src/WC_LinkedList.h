@@ -13,6 +13,16 @@
         WC_LINKEDLIST_INT, WC_LINKEDLIST_DOUBLE, WC_LINKEDLIST_STRING, WC_LINKEDLIST_OBJ
     } element_type_t;
 
+    typedef struct list_value_t {
+        
+        //length in bytes of the item returned.
+        size_t item_length;
+
+        //pointer to the first byte of the item.
+        void* item;
+    
+    } list_value_t;
+
     //define linked_list type (forward declared).
     typedef struct linked_list_t linked_list_t;
 
@@ -25,6 +35,17 @@
     //add an element to the linked_list, obj_length is how many bytes the element passed is.
     //make sure that obj_length includes the null terminator if value is a string.
     unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_length);
+
+    //Get the value at the passed index of the list
+    //returns NULL on failure.
+    //item within list_value_t is a valid pointer in the list.
+    //make sure that if the data it points to is to be manipulated
+    //that the data is cloned to a local variable first.
+    list_value_t linked_list_get(linked_list_t* list, unsigned int index);
+
+    //set an element in the linked_list, obj_length is how many bytes the element passed is.
+    //make sure that obj_length includes the null terminator if value is a string.
+    unsigned char linked_list_set(linked_list_t* list, unsigned int index, void* value, size_t obj_length);
 
     //clone the list passed and return. Returned list must be freed using linked_list_free.
     linked_list_t* linked_list_clone(linked_list_t* list);

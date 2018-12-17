@@ -66,7 +66,7 @@ void modify_int_list(linked_list_t* int_list) {
 
     success = linked_list_remove_value(int_list, &int_to_remove, sizeof(int));
 
-    printf("Status of element removal: %d.\n State of list:\n", success);
+    printf("Status of element removal: %d.\nState of list:\n", success);
 
     linked_list_print(int_list);
 }
@@ -84,6 +84,13 @@ void modify_double_list(linked_list_t* doub_list) {
 
     linked_list_print(doub_list);
 
+    printf("\nRetrieving the value at element 4:\n");
+
+    list_value_t element_four = linked_list_get(doub_list, 4);
+
+    printf("Value at element 4: %f\n", *(double*)element_four.item);
+
+    printf("Length of element 4 in bytes: %ld\n", (unsigned long)element_four.item_length);
 
     printf("\nTesting removal of element by index...\n");
 
@@ -100,7 +107,7 @@ void modify_double_list(linked_list_t* doub_list) {
 
     success = linked_list_remove_value(doub_list, &doub_to_remove, sizeof(double));
 
-    printf("Status of element removal: %d.\n State of list:\n", success);
+    printf("Status of element removal: %d.\nState of list:\n", success);
 
     linked_list_print(doub_list);
 
@@ -121,6 +128,15 @@ void modify_arb_list(linked_list_t* arb_list) {
 
     linked_list_print(arb_list);
 
+    printf("\nSetting the element 3 to a new value.\n");
+
+    unsigned char someMoreBytes[] = {8, 34, 90, 234, 65, 12, 78};
+
+    linked_list_set(arb_list, 3, someMoreBytes, sizeof(unsigned char) * 7);
+
+    printf("Element 3 updated.\nStatus of list:\n");
+
+    linked_list_print(arb_list);
 
     printf("\nRemoving a byte array from the list by index...\n");
 
