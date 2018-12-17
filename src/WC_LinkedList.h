@@ -14,13 +14,11 @@
     } element_type_t;
 
     typedef struct list_value_t {
-        
         //length in bytes of the item returned.
         size_t item_length;
 
         //pointer to the first byte of the item.
         void* item;
-    
     } list_value_t;
 
     //define linked_list type (forward declared).
