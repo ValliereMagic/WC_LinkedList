@@ -94,7 +94,7 @@ void modify_double_list(linked_list_t* doub_list) {
 
     printf("\nTesting removal of element by index...\n");
 
-    unsigned char success = linked_list_remove_at(doub_list, 6);
+    unsigned char success = linked_list_remove_at(doub_list, 0);
 
     printf("Status of element removal: %d.\nState of list:\n", success);
 

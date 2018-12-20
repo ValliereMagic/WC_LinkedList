@@ -39,18 +39,18 @@
     //item within list_value_t is a valid pointer in the list.
     //make sure that if the data it points to is to be manipulated
     //that the data is cloned to a local variable first.
-    list_value_t linked_list_get(linked_list_t* list, unsigned int index);
+    list_value_t linked_list_get(linked_list_t* list, size_t index);
 
     //set an element in the linked_list, obj_length is how many bytes the element passed is.
     //make sure that obj_length includes the null terminator if value is a string.
-    unsigned char linked_list_set(linked_list_t* list, unsigned int index, void* value, size_t obj_length);
+    unsigned char linked_list_set(linked_list_t* list, size_t index, void* value, size_t obj_length);
 
     //clone the list passed and return. Returned list must be freed using linked_list_free.
     linked_list_t* linked_list_clone(linked_list_t* list);
 
     //remove an element from the list using an index.
     //will return 1 on success. 0 Otherwise. (NULL list passed, out of bounds, empty list, etc.)
-    unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index);
+    unsigned char linked_list_remove_at(linked_list_t* list, size_t index);
 
     //remove an element from the list using a value stored in it.
     //will return 1 on success. 0 Otherwise.

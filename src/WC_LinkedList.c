@@ -8,7 +8,7 @@
 //List node
 typedef struct node_t {
     
-    //value that the node horiginals.
+    //value that the node holds.
     void* value;
     
     //bytes of memory value takes up.
@@ -106,7 +106,7 @@ unsigned char is_floating_point_element_equal(double* value_one, double* value_t
 
 //retrieve the node_t at an index in the list
 //will return NULL on failure.
-node_t* linked_list_get_node(linked_list_t* list, unsigned int index) {
+node_t* linked_list_get_node(linked_list_t* list, size_t index) {
 
     //make sure the list exists.
     if (list == NULL) {
@@ -128,7 +128,7 @@ node_t* linked_list_get_node(linked_list_t* list, unsigned int index) {
     node_t* list_iterator = list->head;
 
     //jump to the node at the index specified.
-    for (unsigned int i = 0; i < index; i++) {
+    for (size_t i = 0; i < index; i++) {
 
         list_iterator = list_iterator->next;
     }
@@ -152,12 +152,12 @@ void linked_list_free(linked_list_t* list_to_free) {
         
     node_t* list_head = list_to_free->head;
     
-    int list_size = list_to_free->length;
+    size_t list_size = list_to_free->length;
 
     //free every node in the list.
     node_t* temp_node;
     
-    for (int i = 0; i < list_size; i++) {
+    for (size_t i = 0; i < list_size; i++) {
         
         //save the next one in the list
         //so it can be freed next.
@@ -288,7 +288,7 @@ unsigned char linked_list_add(linked_list_t* list, void* value, size_t obj_lengt
 //item within list_value_t is a valid pointer in the list.
 //make sure that if the data it points to is to be manipulated
 //that the data is cloned to a local variable first.
-list_value_t linked_list_get(linked_list_t* list, unsigned int index) {
+list_value_t linked_list_get(linked_list_t* list, size_t index) {
 
     //initialize value in case element_to_retrieve is NULL.
     list_value_t value_to_return;
@@ -315,7 +315,7 @@ list_value_t linked_list_get(linked_list_t* list, unsigned int index) {
 }
 
 //change a value in a node to another value.
-unsigned char linked_list_set(linked_list_t* list, unsigned int index, void* value, size_t obj_length) {
+unsigned char linked_list_set(linked_list_t* list, size_t index, void* value, size_t obj_length) {
 
     node_t* list_element_to_modify = linked_list_get_node(list, index);
 
@@ -393,7 +393,7 @@ linked_list_t* linked_list_clone(linked_list_t* list) {
 }
 
 //remove an element from the list at an index
-unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index) {
+unsigned char linked_list_remove_at(linked_list_t* list, size_t index) {
 
     //make sure list exists.
     if (list == NULL) { 
@@ -404,7 +404,7 @@ unsigned char linked_list_remove_at(linked_list_t* list, unsigned int index) {
     }
 
     //calculate the maximum value that the index can be.
-    unsigned int max_index_value = list->length - 1;
+    size_t max_index_value = list->length - 1;
 
     //make sure that the index is within the size of the list.
     if (index > max_index_value) { 
