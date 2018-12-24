@@ -146,7 +146,6 @@ void modify_arb_list(linked_list_t* arb_list) {
 
     linked_list_print(arb_list);
 
-
     printf("\nRemoving a byte array from the list by value...\n");
 
     success = linked_list_remove_value(arb_list, someBytes, 
@@ -156,7 +155,7 @@ void modify_arb_list(linked_list_t* arb_list) {
 
     linked_list_print(arb_list);
 
-    printf("Cloning the arbitrary list.\n");
+    printf("\nCloning the arbitrary list...\n");
 
     linked_list_t* cloned_arb_list = linked_list_clone(arb_list);
 
@@ -167,6 +166,12 @@ void modify_arb_list(linked_list_t* arb_list) {
     printf("Freeing the cloned list:\n");
 
     linked_list_free(cloned_arb_list);
+
+    printf("\nShuffling the arbitrary list...\n");
+
+    linked_list_shuffle(arb_list);
+
+    linked_list_print(arb_list);
 }
 
 int main(void) {
