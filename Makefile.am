@@ -1,6 +1,3 @@
-#Include M4 Macros
-ACLOCAL_AMFLAGS = -I m4
-
 #Tests
 check_PROGRAMS = list_tests
 

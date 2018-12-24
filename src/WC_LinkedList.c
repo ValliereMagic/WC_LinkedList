@@ -392,6 +392,63 @@ linked_list_t* linked_list_clone(linked_list_t* list) {
     return new_list;
 }
 
+//shuffle the order of values in the linked list
+void linked_list_shuffle(linked_list_t* list) {
+
+    //make sure that the list actually exists.
+    if (list == NULL) {
+
+        fprintf(stderr, "Error. Cannot clone a NULL list.\n");
+
+        return;
+    }
+
+    //Initiate libsodium, and return on failure.
+    if (sodium_init() < 0) {
+
+        return;
+    }
+
+    size_t list_length = list->length;
+
+    //iterate through every element in the list
+    for (size_t i = 0; i < list_length; i++) {
+
+        uint32_t random_index = randombytes_uniform((uint32_t)list_length);
+
+        //retrieve the element at the random index
+        node_t* random_list_node = linked_list_get_node(list, (size_t)random_index);
+
+        node_t* current_node = linked_list_get_node(list, i);
+
+        //Make sure that get_node didn't have any issues.
+        if (random_list_node == NULL || current_node == NULL) {
+
+            return;
+        }
+
+        //retrieve the value and length of the current node
+        void* temp_value = current_node->value;
+
+        size_t temp_val_length = current_node->value_length;
+
+        
+        //replace the value and length in the current node
+        //with the value and length in the random node.
+        current_node->value = random_list_node->value;
+
+        current_node->value_length = random_list_node->value_length;
+
+        
+        //replace the value and length in the random node
+        //with the saved value and length that were in
+        //the current_node.
+        random_list_node->value = temp_value;
+
+        random_list_node->value_length = temp_val_length;
+    }
+}
+
 //remove an element from the list at an index
 unsigned char linked_list_remove_at(linked_list_t* list, size_t index) {
 
