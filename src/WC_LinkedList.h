@@ -9,6 +9,7 @@
     *   WC_LINKEDLIST_STRING: a null terminated string is stored.
     *   WC_LINKEDLIST_OBJ: something else is stored. (could be whatever you want!).
     */
+
     typedef enum element_type_t {
         WC_LINKEDLIST_INT, WC_LINKEDLIST_DOUBLE, WC_LINKEDLIST_STRING, WC_LINKEDLIST_OBJ
     } element_type_t;
@@ -44,6 +45,14 @@
     //set an element in the linked_list, obj_length is how many bytes the element passed is.
     //make sure that obj_length includes the null terminator if value is a string.
     unsigned char linked_list_set(linked_list_t* list, size_t index, void* value, size_t obj_length);
+
+    //check whether the list contains a value
+    //returns 1 if the value exists in the list. 0 when the value isn't there.
+    unsigned char linked_list_contains(linked_list_t* list, void* value, size_t obj_length);
+   
+    //return the length of the list
+    //returns a size of 0 when the list is NULL.
+    size_t linked_list_size(linked_list_t* list);
 
     //clone the list passed and return. Returned list must be freed using linked_list_free.
     linked_list_t* linked_list_clone(linked_list_t* list);
