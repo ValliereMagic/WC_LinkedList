@@ -35,6 +35,10 @@ void modify_string_list(linked_list_t* str_list) {
     printf("Status of element removal: %d.\nState of list:\n", success);
 
     linked_list_print(str_list);
+
+    printf("\nPrinting out the length of the list...\n");
+
+    printf("List length: %ld\n", (unsigned long)linked_list_size(str_list));
 }
 
 void modify_int_list(linked_list_t* int_list) {
@@ -111,6 +115,15 @@ void modify_double_list(linked_list_t* doub_list) {
 
     linked_list_print(doub_list);
 
+    printf("\nChecking whether 6.14 exists in the list...\n");
+
+    double is_in = 6.14;
+
+    printf("%s.\n", (linked_list_contains(doub_list, &is_in, sizeof(double)) ? "True" : "False"));
+
+    printf("\nChecking whether 5.14 exists in the list...\n");
+
+    printf("%s.\n", (linked_list_contains(doub_list, &doub_to_remove, sizeof(double)) ? "True" : "False"));
 }
 
 void modify_arb_list(linked_list_t* arb_list) {
@@ -166,6 +179,8 @@ void modify_arb_list(linked_list_t* arb_list) {
     printf("Freeing the cloned list:\n");
 
     linked_list_free(cloned_arb_list);
+
+    printf("Cloned list freed.\n");
 
     printf("\nShuffling the arbitrary list...\n");
 

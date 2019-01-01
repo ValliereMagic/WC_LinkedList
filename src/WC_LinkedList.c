@@ -136,6 +136,89 @@ node_t* linked_list_get_node(linked_list_t* list, size_t index) {
     return list_iterator;
 }
 
+//Returns 1 when a value is successfully found. previous will be set to the node previous
+//to the node found to be equal. This is useful for the linked_list_remove_value function.
+unsigned char linked_list_find_value(linked_list_t* list, void* value, size_t obj_length, node_t** previous) {
+
+    //make sure list exists.
+    if (list == NULL) { 
+        
+        fprintf(stderr, "Error. Attempting to remove a value from a NULL list.\n");
+
+        return 0;
+    }
+
+    //save head to make sure list itself doesn't lose it's head.
+    node_t* current = list->head;
+
+    //make sure that the list isn't empty.
+    if (current == NULL) { 
+                
+        fprintf(stderr, "Error. Attempting to remove values from an empty list.");
+
+        return 0;
+    }
+
+    //make sure not attempting to remove a NULL value from the list.
+    if (value == NULL) {
+
+        fprintf(stderr, "Error. Attempting to remove a NULL value from the list.\n");
+
+        return 0;
+    }
+
+    //make sure that previous is not NULL
+    //If it is NULL previous will not be used.
+    if (previous != NULL) {
+
+        //used for removal when removing element not at index 0.
+        *previous = NULL;
+    }
+    
+    //retrieve length of list.
+    int list_length = list->length;
+
+    //retrieve type of list.
+    element_type_t list_type = list->e_type;
+
+    //look through all of the elements in the list.
+    for (int i = 0; i < list_length; i++) {
+
+        //check for an element in the list equal to the
+        //value passed.
+        unsigned char equal;
+        
+        //handle equality for floating point numbers.
+        if (list_type == WC_LINKEDLIST_DOUBLE) {
+
+            equal = is_floating_point_element_equal(current->value, value);
+        
+        } else {
+
+            equal = is_element_equal(value, obj_length, current->value, current->value_length);
+        }
+
+        //Found an element in the list equal to the value passed.
+        if (equal) {
+            
+            return 1;
+        }
+
+        //move over one in the list
+        
+        //only using previous if a valid previous pointer passed to function.
+        if (previous != NULL) {
+            
+            *previous = current;
+        }
+        
+        current = current->next;
+    }
+    
+    //Failed to find the value in the list. Return 0.
+    return 0;    
+}
+
 /*
 * Public Functions
 */
@@ -348,6 +431,25 @@ unsigned char linked_list_set(linked_list_t* list, size_t index, void* value, si
     return 1;
 }
 
+//check whether the list contains a value
+//returns 1 if the value exists in the list. 0 when the value isn't there.
+unsigned char linked_list_contains(linked_list_t* list, void* value, size_t obj_length) {
+
+    return linked_list_find_value(list, value, obj_length, NULL);
+}
+
+//return the length of the list
+size_t linked_list_size(linked_list_t* list) {
+
+    if (list == NULL) {
+        
+        //list doesn't exist therefore it has no length.
+        return 0;
+    }
+
+    return list->length;
+}
+
 //clone the list passed.
 linked_list_t* linked_list_clone(linked_list_t* list) {
 
@@ -537,92 +639,44 @@ unsigned char linked_list_remove_at(linked_list_t* list, size_t index) {
 //remove an element from the list using a value
 int linked_list_remove_value(linked_list_t* list, void* value, size_t obj_length) {
 
-    //make sure list exists.
-    if (list == NULL) { 
+    //previous node to the one containing the value: (if found)
+    node_t* previous;
+
+    //If an equal element is discovered, remove it.
+    if (linked_list_find_value(list, value, obj_length, &previous)) {
         
-        fprintf(stderr, "Error. Attempting to remove a value from a NULL list.\n");
+        //equal to the first element in the list
+        if (previous == NULL) {
+            
+            //make a copy of head, to free its value when it is skipped over.
+            node_t* temp = list->head;
 
-        return 0;
-    }
+            //remove head from the list.
+            list->head = temp->next;
 
-    //save head to make sure list itself doesn't lose it's head.
-    node_t* current = list->head;
+            //free current.
+            node_free(temp);
 
-    //make sure that the list isn't empty.
-    if (current == NULL) { 
-                
-        fprintf(stderr, "Error. Attempting to remove values from an empty list.");
-
-        return 0;
-    }
-
-    //make sure not attempting to remove a NULL value from the list.
-    if (value == NULL) {
-
-        fprintf(stderr, "Error. Attempting to remove a NULL value from the list.\n");
-
-        return 0;
-    }
-
-    //used for removal when removing element not at index 0.
-    node_t* previous = NULL;
-    
-    //retrieve length of list.
-    int list_length = list->length;
-
-    //retrieve type of list.
-    element_type_t list_type = list->e_type;
-
-    //look through all of the elements in the list.
-    for (int i = 0; i < list_length; i++) {
-
-        //check for an element in the list equal to the
-        //value passed.
-        unsigned char equal;
-        
-        //handle equality for floating point numbers.
-        if (list_type == WC_LINKEDLIST_DOUBLE) {
-
-            equal = is_floating_point_element_equal(current->value, value);
-        
+        //equality not at first element.
         } else {
-
-            equal = is_element_equal(value, obj_length, current->value, current->value_length);
-        }
-
-        //If an equal element is discovered, remove it.
-        if (equal) {
             
-            //equal to the first element in the list
-            if (previous == NULL) {
-                
-                //remove current from the list.
-                list->head = current->next;
-
-                //free current.
-                node_free(current);
-
-            //equality not at first element.
-            } else {
-            
-                //jump over current element.
-                previous->next = current->next;
-                
-                //free the node to remove.
-                node_free(current);
-            }
-
-            //decrement list length.
-            list->length--;
-
-            //return successful removal.
-            return 1;            
-        }
-
-        //move over one in the list
-        previous = current;
+            //get the node to remove from the list.
+            //we know it exists, otherwise linked_list_find_value
+            //would return 0.
+            node_t* current = previous->next;
         
-        current = current->next;
+            //jump over current element.
+            previous->next = current->next;
+            
+            //free the node to remove.
+            node_free(current);
+        }
+
+        //decrement list length.
+        list->length--;
+
+        //return successful removal.
+        return 1;            
     }
 
     //element was not found in the list.
