@@ -124,6 +124,17 @@ void modify_double_list(linked_list_t* doub_list) {
     printf("\nChecking whether 5.14 exists in the list...\n");
 
     printf("%s.\n", (linked_list_contains(doub_list, &doub_to_remove, sizeof(double)) ? "True" : "False"));
+
+    printf("\nTesting iteration of double list...\n");
+
+    linked_list_iterator_t* double_iter = linked_list_iterator(doub_list);
+
+    while (linked_list_has_next(double_iter)) {
+
+        printf("%f\n", *(double*)linked_list_get_next(double_iter));
+    }
+
+    linked_list_free_iterator(double_iter);
 }
 
 void modify_arb_list(linked_list_t* arb_list) {
