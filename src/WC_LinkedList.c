@@ -36,6 +36,144 @@ typedef struct linked_list_t {
 
 } linked_list_t;
 
+
+//List iterator
+typedef struct linked_list_iterator_t {
+
+    //current iterator node
+    node_t* current;
+
+    //new flag, to return current on first
+    //get_next
+    unsigned char is_new;
+
+    //current index of iteration
+    size_t current_index;
+
+    //max iteration index
+    size_t max_index;
+
+} linked_list_iterator_t;
+
+/*
+* List iterator functions
+*/
+
+//create a new linked_list_iterator and return it.
+//will return NULL on failure. 
+//Must be freed when done using.
+linked_list_iterator_t* linked_list_iterator(linked_list_t* list) {
+
+    linked_list_iterator_t* it = malloc(sizeof(linked_list_iterator_t));
+
+    //make sure that the system returned memory for the iterator,
+    //and that the list exists,
+    //and make sure the list has at least one element.
+    if (it == NULL || list == NULL || list->head == NULL || list->length == 0) {
+
+        return NULL;
+    }
+
+    //initialize iterator values.
+    it->current = list->head;
+
+    it->is_new = 0;
+
+    it->current_index = 0;
+
+    it->max_index = list->length - 1;
+
+    return it;
+}
+
+//free a linked list iterator
+void linked_list_free_iterator(linked_list_iterator_t* list_it) {
+
+    free(list_it);
+}
+
+//Function checks to see if there is another element in the list 
+//after the current one.
+unsigned char linked_list_has_next(linked_list_iterator_t* list_it) {
+
+    //Checks if the list iterator actually exists before attempting to 
+    //dereference its properties
+    if (list_it == NULL) {
+
+        return 0;
+    }
+
+    //Check to see if there is another element in the linked list.
+    //If there is an element return 1 otherwise return 0 
+    if (list_it->current_index < list_it->max_index) {
+
+        return 1;
+    
+    } else {
+
+        return 0;
+    }
+}
+
+//retrieve the next element in the list; on the first call from
+//a new iterator the first element in the list will be returned.
+void* linked_list_get_next(linked_list_iterator_t* list_it) {
+
+    //make sure the list iterator exists.
+    if (list_it == NULL) {
+        
+        return NULL;
+    }
+
+    //on the first call return the head of the list
+    //otherwise, element 0 will never be iterated over.
+    if (list_it->is_new == 0) {
+
+        list_it->is_new = 1;
+        
+        node_t* current = list_it->current;
+
+        //make sure the current node in the
+        //iterator exists.
+        if (current == NULL) {
+
+            return NULL;
+        }
+
+        return current->value;
+    
+    } else {
+
+        //pull current out of the iterator
+        node_t* current = list_it->current;
+
+        //make sure current exists.
+        if (current == NULL) {
+            
+            return NULL;
+        }
+
+        //jump to the next element to retrieve.
+        current = current->next;
+
+        //make sure that the element after current exists.
+        if (current == NULL) {
+
+            return NULL;
+        }
+
+        //move the iterator to the next element in the list.
+        list_it->current = current;
+
+        //increment the iterator's index
+        list_it->current_index++;
+
+        //return the value stored in the next element.
+        return current->value;
+    }
+}
+
+
 /*
 * Private Functions
 */

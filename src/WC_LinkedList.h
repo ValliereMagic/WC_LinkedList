@@ -25,6 +25,30 @@
     //define linked_list type (forward declared).
     typedef struct linked_list_t linked_list_t;
 
+    //define linked list iterator (forward declared).
+    typedef struct linked_list_iterator_t linked_list_iterator_t;
+
+    //List iterator functions:
+
+    //create a new linked_list_iterator and return it.
+    //will return NULL on failure. 
+    //Must be freed when done using.
+    linked_list_iterator_t* linked_list_iterator(linked_list_t* list);
+
+    //free a linked list iterator
+    void linked_list_free_iterator(linked_list_iterator_t* list_it);
+
+    //Function checks to see if theres another element in the list 
+    //after the current one.
+    unsigned char linked_list_has_next(linked_list_iterator_t* list_it);
+
+    //retrieve the next element in the list; on the first call from
+    //a new iterator the first element in the list will be returned.
+    //will return NULL on error.
+    void* linked_list_get_next(linked_list_iterator_t* list_it);
+
+    //List functions:
+
     //free an allocated linked_list.
     void linked_list_free(linked_list_t* list_to_free);
 
