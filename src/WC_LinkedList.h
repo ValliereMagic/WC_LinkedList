@@ -11,15 +11,19 @@
     */
 
     typedef enum element_type_t {
+        
         WC_LINKEDLIST_INT, WC_LINKEDLIST_DOUBLE, WC_LINKEDLIST_STRING, WC_LINKEDLIST_OBJ
+    
     } element_type_t;
 
     typedef struct list_value_t {
+        
         //length in bytes of the item returned.
         size_t item_length;
 
         //pointer to the first byte of the item.
         void* item;
+    
     } list_value_t;
 
     //define linked_list type (forward declared).
@@ -95,4 +99,5 @@
     //print out all of the elements of a linked list.
     //will print out the hex values for a list of type WC_LINKEDLIST_OBJ
     void linked_list_print(linked_list_t* list);
+
 #endif
