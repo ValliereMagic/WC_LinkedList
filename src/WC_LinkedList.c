@@ -36,7 +36,6 @@ typedef struct linked_list_t {
 
 } linked_list_t;
 
-
 //List iterator
 typedef struct linked_list_iterator_t {
 
@@ -172,7 +171,6 @@ void* linked_list_get_next(linked_list_iterator_t* list_it) {
         return current->value;
     }
 }
-
 
 /*
 * Private Functions
