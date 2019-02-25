@@ -2,7 +2,7 @@
 #include <string.h>
 #include "WC_LinkedList.h"
 
-void modify_string_list(linked_list_t* str_list) {
+void modify_string_list(struct linked_list* str_list) {
     printf("\nAdding 10 duplicate string elements to the list...\n");
     char random_string[] = "HELLO LIST";
 
@@ -27,7 +27,7 @@ void modify_string_list(linked_list_t* str_list) {
     printf("List length: %ld\n", (unsigned long)linked_list_size(str_list));
 }
 
-void modify_int_list(linked_list_t* int_list) {
+void modify_int_list(struct linked_list* int_list) {
     printf("\nAdding 10 integers to the list...\n");
 
     for (int i = 1; i <= 10; i++) {
@@ -48,7 +48,7 @@ void modify_int_list(linked_list_t* int_list) {
     linked_list_print(int_list);
 }
 
-void modify_double_list(linked_list_t* doub_list) {
+void modify_double_list(struct linked_list* doub_list) {
     printf("\nAdding some doubles to the list...\n");
 
     for (double i = 3.14; i <= 15; i++) {
@@ -58,7 +58,7 @@ void modify_double_list(linked_list_t* doub_list) {
     linked_list_print(doub_list);
 
     printf("\nRetrieving the value at element 4:\n");
-    list_value_t element_four = linked_list_get(doub_list, 4);
+    struct list_value element_four = linked_list_get(doub_list, 4);
     printf("Value at element 4: %f\n", *(double*)element_four.item);
     printf("Length of element 4 in bytes: %ld\n", (unsigned long)element_four.item_length);
 
@@ -81,7 +81,7 @@ void modify_double_list(linked_list_t* doub_list) {
     printf("%s.\n", (linked_list_contains(doub_list, &doub_to_remove, sizeof(double)) ? "True" : "False"));
 
     printf("\nTesting iteration of double list...\n");
-    linked_list_iterator_t* double_iter = linked_list_iterator(doub_list);
+    struct linked_list_iterator* double_iter = linked_list_get_iterator(doub_list);
 
     while (linked_list_has_next(double_iter)) {
         printf("%f\n", *(double*)linked_list_get_next(double_iter));
@@ -89,7 +89,7 @@ void modify_double_list(linked_list_t* doub_list) {
     linked_list_free_iterator(double_iter);
 }
 
-void modify_arb_list(linked_list_t* arb_list) {
+void modify_arb_list(struct linked_list* arb_list) {
     printf("\nAdding some bytes to the list...\n");
     unsigned char someBytes[] = {3, 56, 112, 45, 128};
 
@@ -117,7 +117,7 @@ void modify_arb_list(linked_list_t* arb_list) {
     linked_list_print(arb_list);
 
     printf("\nCloning the arbitrary list...\n");
-    linked_list_t* cloned_arb_list = linked_list_clone(arb_list);
+    struct linked_list* cloned_arb_list = linked_list_clone(arb_list);
     printf("Printing the cloned list:\n");
     linked_list_print(cloned_arb_list);
 
@@ -132,10 +132,10 @@ void modify_arb_list(linked_list_t* arb_list) {
 
 int main(void) {
     printf("Testing the creation of linked list of each type...\n");
-    linked_list_t* arb_list = linked_list_new(WC_LINKEDLIST_OBJ);
-    linked_list_t* int_list = linked_list_new(WC_LINKEDLIST_INT);
-    linked_list_t* doub_list = linked_list_new(WC_LINKEDLIST_DOUBLE);
-    linked_list_t* string_list = linked_list_new(WC_LINKEDLIST_STRING);
+    struct linked_list* arb_list = linked_list_new(WC_LINKEDLIST_OBJ);
+    struct linked_list* int_list = linked_list_new(WC_LINKEDLIST_INT);
+    struct linked_list* doub_list = linked_list_new(WC_LINKEDLIST_DOUBLE);
+    struct linked_list* string_list = linked_list_new(WC_LINKEDLIST_STRING);
     printf("Creation completed.\n");
 
     printf("\nTesting string list...\n");
