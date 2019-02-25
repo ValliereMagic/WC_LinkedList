@@ -132,7 +132,7 @@ void* linked_list_get_next(struct linked_list_iterator* list_it) {
 */
 
 //function for freeing a single node.
-void node_free(struct node* node_to_free) {
+static void node_free(struct node* node_to_free) {
     if (node_to_free == NULL || node_to_free->value == NULL) { 
         fprintf(stderr, "Error. Attempting to free NULL node.\n");
         return;
@@ -142,7 +142,7 @@ void node_free(struct node* node_to_free) {
 }
 
 //function for allocating memory for a new list element's value.
-void* allocate_element(void* value, size_t obj_length) {
+static void* allocate_element(void* value, size_t obj_length) {
     //allocate memory required for new element.
     void* new_list_element = malloc(obj_length);
     //copy the passed value into it's new container.
@@ -152,7 +152,7 @@ void* allocate_element(void* value, size_t obj_length) {
 
 //one if the elements are equal,
 //0 otherwise.
-unsigned char is_element_equal(char* value_one, size_t value_one_length, char* value_two, size_t value_two_length) {
+static unsigned char is_element_equal(char* value_one, size_t value_one_length, char* value_two, size_t value_two_length) {
     //make sure each element has the same length.
     if (value_one_length != value_two_length) {
         //elements are not the same length,
@@ -173,7 +173,7 @@ unsigned char is_element_equal(char* value_one, size_t value_one_length, char* v
 
 //one if the elements are equal,
 //0 otherwise.
-unsigned char is_floating_point_element_equal(double* value_one, double* value_two) {
+static unsigned char is_floating_point_element_equal(double* value_one, double* value_two) {
     //allowed inaccuracy
     double epsilon = 0.00001;
     return (fabs(*value_one - *value_two) < epsilon);
@@ -181,7 +181,7 @@ unsigned char is_floating_point_element_equal(double* value_one, double* value_t
 
 //retrieve the node at an index in the list
 //will return NULL on failure.
-struct node* linked_list_get_node(struct linked_list* list, size_t index) {
+static struct node* linked_list_get_node(struct linked_list* list, size_t index) {
     //make sure the list exists.
     if (list == NULL) {
         fprintf(stderr, "Error, attempting to retrieve a node from a NULL linked list.\n");
@@ -203,7 +203,7 @@ struct node* linked_list_get_node(struct linked_list* list, size_t index) {
 
 //Returns 1 when a value is successfully found. previous will be set to the node previous
 //to the node found to be equal. This is useful for the linked_list_remove_value function.
-unsigned char linked_list_find_value(struct linked_list* list, void* value, size_t obj_length, struct node** previous) {
+static unsigned char linked_list_find_value(struct linked_list* list, void* value, size_t obj_length, struct node** previous) {
     //make sure list exists.
     if (list == NULL) { 
         fprintf(stderr, "Error. Attempting to remove a value from a NULL list.\n");
@@ -584,7 +584,7 @@ int linked_list_remove_value(struct linked_list* list, void* value, size_t obj_l
 * START private print functions
 */
 
-void print_int(struct node* list_head, size_t length) {
+static void print_int(struct node* list_head, size_t length) {
     for (size_t i = 0; i < length; i++) {
         //print out the integer value stored.
         printf("%d", *(int*)list_head->value);
@@ -598,7 +598,7 @@ void print_int(struct node* list_head, size_t length) {
     }
 }
 
-void print_double(struct node* list_head, size_t length) {
+static void print_double(struct node* list_head, size_t length) {
     for (size_t i = 0; i < length; i++) {
         //print out the double value stored.
         printf("%f", *(double*)list_head->value);
@@ -612,7 +612,7 @@ void print_double(struct node* list_head, size_t length) {
     }
 }
 
-void print_string(struct node* list_head, size_t length) {
+static void print_string(struct node* list_head, size_t length) {
     for (size_t i = 0; i < length; i++) {
         //print out the string value stored.
         printf("%s", (char*)list_head->value);
@@ -626,7 +626,7 @@ void print_string(struct node* list_head, size_t length) {
     }
 }
 
-void print_obj(struct node* list_head, size_t length) {
+static void print_obj(struct node* list_head, size_t length) {
     for (size_t i = 0; i < length; i++) {
         //pull and caste bytes of element.
         unsigned char* current_value_bytes = list_head->value;
