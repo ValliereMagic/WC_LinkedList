@@ -90,7 +90,6 @@ unsigned char linked_list_has_next(struct linked_list_iterator* list_it) {
 void* linked_list_get_next(struct linked_list_iterator* list_it) {
     //make sure the list iterator exists.
     if (list_it == NULL) {
-        
         return NULL;
     }
     //on the first call return the head of the list
@@ -115,7 +114,6 @@ void* linked_list_get_next(struct linked_list_iterator* list_it) {
         current = current->next;
         //make sure that the element after current exists.
         if (current == NULL) {
-
             return NULL;
         }
         //move the iterator to the next element in the list.
