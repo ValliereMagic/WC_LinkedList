@@ -44,14 +44,12 @@ struct linked_list_iterator {
 * List iterator functions
 */
 
-//create a new linked_list_iterator and return it.
-//will return NULL on failure. 
+//create a new linked_list_iterator and return it. will return NULL on failure.
 //Must be freed when done using.
 struct linked_list_iterator* linked_list_get_iterator(struct linked_list* list) {
     struct linked_list_iterator* it = malloc(sizeof(struct linked_list_iterator));
-    //make sure that the system returned memory for the iterator,
-    //and that the list exists,
-    //and make sure the list has at least one element.
+    //make sure that the system returned memory for the iterator, and that the
+    //list exists, and make sure the list has at least one element.
     if (it == NULL || list == NULL || list->head == NULL || list->length == 0) {
         return NULL;
     }
@@ -68,37 +66,32 @@ void linked_list_free_iterator(struct linked_list_iterator* list_it) {
     free(list_it);
 }
 
-//Function checks to see if there is another element in the list 
-//after the current one.
+//Function checks to see if there is another element in the list after the
+//current one.
 unsigned char linked_list_has_next(struct linked_list_iterator* list_it) {
-    //Checks if the list iterator actually exists before attempting to 
+    //Checks if the list iterator actually exists before attempting to
     //dereference its properties
     if (list_it == NULL) {
         return 0;
     }
-    //Check to see if there is another element in the linked list.
-    //If there is an element return 1 otherwise return 0 
-    if (list_it->current_index < list_it->max_index) {
-        return 1;
-    } else {
-        return 0;
-    }
+    //Check to see if there is another element in the linked list. If there is
+    //an element return 1 otherwise return 0 
+    return (list_it->current_index < list_it->max_index);
 }
 
-//retrieve the next element in the list; on the first call from
-//a new iterator the first element in the list will be returned.
+//retrieve the next element in the list; on the first call from a new iterator
+//the first element in the list will be returned.
 void* linked_list_get_next(struct linked_list_iterator* list_it) {
     //make sure the list iterator exists.
     if (list_it == NULL) {
         return NULL;
     }
-    //on the first call return the head of the list
-    //otherwise, element 0 will never be iterated over.
+    //on the first call return the head of the list otherwise, element 0 will
+    //never be iterated over.
     if (list_it->is_new == 0) {
         list_it->is_new = 1;
         struct node* current = list_it->current;
-        //make sure the current node in the
-        //iterator exists.
+        //make sure the current node in the iterator exists.
         if (current == NULL) {
             return NULL;
         }
@@ -132,7 +125,7 @@ void* linked_list_get_next(struct linked_list_iterator* list_it) {
 //function for freeing a single node.
 static void node_free(struct node* node_to_free) {
     if (node_to_free == NULL || node_to_free->value == NULL) { 
-        fprintf(stderr, "Error. Attempting to free NULL node.\n");
+        fputs("Error. Attempting to free NULL node.\n", stderr);
         return;
     }
     free(node_to_free->value);
@@ -148,17 +141,15 @@ static void* allocate_element(void* value, size_t obj_length) {
     return new_list_element;
 }
 
-//one if the elements are equal,
-//0 otherwise.
-static unsigned char is_element_equal(char* value_one, size_t value_one_length, char* value_two, size_t value_two_length) {
+//one if the elements are equal, 0 otherwise.
+static unsigned char is_element_equal(char* value_one, size_t value_one_length,
+                                      char* value_two, size_t value_two_length) {
     //make sure each element has the same length.
     if (value_one_length != value_two_length) {
-        //elements are not the same length,
-        //therefore they cannot be equal.
+        //elements are not the same length, therefore they cannot be equal.
         return 0;
     }
-    //check each byte of value_one and value_two
-    //to see if they are equal.
+    //check each byte of value_one and value_two to see if they are equal.
     for (size_t i = 0; i < value_one_length; i++) {
         //if one byte isn't equal, the elements aren't equal.
         if (value_one[i] != value_two[i]) {
@@ -169,25 +160,23 @@ static unsigned char is_element_equal(char* value_one, size_t value_one_length, 
     return 1;
 }
 
-//one if the elements are equal,
-//0 otherwise.
+//one if the elements are equal, 0 otherwise.
 static unsigned char is_floating_point_element_equal(double* value_one, double* value_two) {
     //allowed inaccuracy
     double epsilon = 0.00001;
     return (fabs(*value_one - *value_two) < epsilon);
 }
 
-//retrieve the node at an index in the list
-//will return NULL on failure.
+//retrieve the node at an index in the list will return NULL on failure.
 static struct node* linked_list_get_node(struct linked_list* list, size_t index) {
     //make sure the list exists.
     if (list == NULL) {
-        fprintf(stderr, "Error, attempting to retrieve a node from a NULL linked list.\n");
+        fputs("Error, attempting to retrieve a node from a NULL linked list.\n", stderr);
         return NULL;
     }
     //make sure that the index is within the bounds of the list.
     if (index > list->length) {
-        fprintf(stderr, "Error. Attempting to get element from an index out of bounds.\n");
+        fputs("Error. Attempting to get element from an index out of bounds.\n", stderr);
         return NULL;
     }
     //retrieve head of list for iteration
@@ -199,28 +188,30 @@ static struct node* linked_list_get_node(struct linked_list* list, size_t index)
     return list_iterator;
 }
 
-//Returns 1 when a value is successfully found. previous will be set to the node previous
-//to the node found to be equal. This is useful for the linked_list_remove_value function.
-static unsigned char linked_list_find_value(struct linked_list* list, void* value, size_t obj_length, struct node** previous) {
+//Returns 1 when a value is successfully found. previous will be set to the node
+//previous to the node found to be equal. This is useful for the
+//linked_list_remove_value function.
+static unsigned char linked_list_find_value(struct linked_list* list, void* value, 
+                                            size_t obj_length, struct node** previous) {
     //make sure list exists.
     if (list == NULL) { 
-        fprintf(stderr, "Error. Attempting to remove a value from a NULL list.\n");
+        fputs("Error. Attempting to remove a value from a NULL list.\n", stderr);
         return 0;
     }
     //save head to make sure list itself doesn't lose it's head.
     struct node* current = list->head;
     //make sure that the list isn't empty.
     if (current == NULL) { 
-        fprintf(stderr, "Error. Attempting to remove values from an empty list.");
+        fputs("Error. Attempting to remove values from an empty list.", stderr);
         return 0;
     }
     //make sure not attempting to remove a NULL value from the list.
     if (value == NULL) {
-        fprintf(stderr, "Error. Attempting to remove a NULL value from the list.\n");
+        fputs("Error. Attempting to remove a NULL value from the list.\n", stderr);
         return 0;
     }
-    //make sure that previous is not NULL
-    //If it is NULL previous will not be used.
+    //make sure that previous is not NULL If it is NULL previous will not be
+    //used.
     if (previous != NULL) {
         //used for removal when removing element not at index 0.
         *previous = NULL;
@@ -231,8 +222,7 @@ static unsigned char linked_list_find_value(struct linked_list* list, void* valu
     enum linked_list_type list_type = list->e_type;
     //look through all of the elements in the list.
     for (int i = 0; i < list_length; i++) {
-        //check for an element in the list equal to the
-        //value passed.
+        //check for an element in the list equal to the value passed.
         unsigned char equal;
         //handle equality for floating point numbers.
         if (list_type == WC_LINKEDLIST_DOUBLE) {
@@ -244,8 +234,8 @@ static unsigned char linked_list_find_value(struct linked_list* list, void* valu
         if (equal) {
             return 1;
         }
-        //move over one in the list
-        //only using previous if a valid previous pointer passed to function.
+        //move over one in the list only using previous if a valid previous
+        //pointer passed to function.
         if (previous != NULL) {
             *previous = current;
         }
@@ -262,7 +252,7 @@ static unsigned char linked_list_find_value(struct linked_list* list, void* valu
 //free a linked list from memory.
 void linked_list_free(struct linked_list* list_to_free) {
     if (list_to_free == NULL) { 
-        fprintf(stderr, "Error. Attempting to free null linked list.\n");
+        fputs("Error. Attempting to free null linked list.\n", stderr);
         return;
     }
     struct node* list_head = list_to_free->head;
@@ -271,16 +261,14 @@ void linked_list_free(struct linked_list* list_to_free) {
     struct node* temp_node;
     
     for (size_t i = 0; i < list_size; i++) {
-        //save the next one in the list
-        //so it can be freed next.
+        //save the next one in the list so it can be freed next.
         temp_node = list_head->next;
         //free the current one.
         node_free(list_head);
         //move on to the next node.
         list_head = temp_node;
     }
-    //free the list itself after all nodes
-    //freed.
+    //free the list itself after all nodes freed.
     free(list_to_free);
 }
 
@@ -290,7 +278,7 @@ struct linked_list* linked_list_new(enum linked_list_type type) {
     struct linked_list* new_list = malloc(sizeof(struct linked_list));
     //make sure that the list allocation was successful.
     if (new_list == NULL) {
-        fprintf(stderr, "Error. Allocation of a new Linked List failed. System may be out of memory.\n");
+        fputs("Error. Allocation of a new Linked List failed. System may be out of memory.\n", stderr);
         return NULL;
     }
     //set list properties to default values
@@ -305,13 +293,13 @@ struct linked_list* linked_list_new(enum linked_list_type type) {
 unsigned char linked_list_add(struct linked_list* list, void* value, size_t obj_length) {
     //make sure the passed list exists.
     if (list == NULL) { 
-        fprintf(stderr, "Error. attempting to add an element to a NULL Linked List\n");
+        fputs("Error. attempting to add an element to a NULL Linked List\n", stderr);
         //return that the addition failed.
         return 0;
     }
     //make sure a null value is not being added to the list.
     if (value == NULL) {
-        fprintf(stderr, "Error. attempting to add a NULL element to a list.\n");
+        fputs("Error. attempting to add a NULL element to a list.\n", stderr);
         //return that the addition failed.
         return 0;
     }
@@ -321,7 +309,7 @@ unsigned char linked_list_add(struct linked_list* list, void* value, size_t obj_
     void* new_value = allocate_element(value, obj_length);
     //make sure that allocation was successful.
     if (new_value == NULL) {
-        fprintf(stderr, "Error. System out of memory, allocating a new element failed.\n");
+        fputs("Error. System out of memory, allocating a new element failed.\n", stderr);
         return 0;
     }
     new_node->value = new_value;
@@ -340,28 +328,25 @@ unsigned char linked_list_add(struct linked_list* list, void* value, size_t obj_
         //make a copy of the list tail
         //to make sure not null
         struct node* list_tail = list->tail;
-        //make sure the tail exists before
-        //attempting to dereference tail->next
+        //make sure the tail exists before attempting to dereference tail->next
         if (list_tail == NULL) {
-            fprintf(stderr, "Error. the tail of the list is NULL.\n");
+            fputs("Error. the tail of the list is NULL.\n", stderr);
         }
         //set the new tail of the list
         list_tail->next = new_node;
         //update the tail node
         list->tail = list_tail->next;
     }
-    //add one to the list length, as an element
-    //has been added.
+    //add one to the list length, as an element has been added.
     list->length++;
     //return that the addition was successful.
     return 1;    
 }
 
-//Get the value at the passed index of the list
-//returns NULL on failure.
-//item within WC_list_value is a valid pointer in the list.
-//make sure that if the data it points to is to be manipulated
-//that the data is cloned to a local variable first.
+//Get the value at the passed index of the list returns NULL on failure. Item
+//within WC_list_value is a valid pointer in the list. make sure that if the
+//data it points to is to be manipulated that the data is cloned to a local
+//variable first.
 struct list_value linked_list_get(struct linked_list* list, size_t index) {
     //initialize value in case element_to_retrieve is NULL.
     struct list_value value_to_return;
@@ -390,8 +375,8 @@ unsigned char linked_list_set(struct linked_list* list, size_t index, void* valu
     void* list_element_value = list_element_to_modify->value;
     //reallocate the value in the element to the right size
     list_element_value = realloc(list_element_value, obj_length);
-    //if the memory reallocation fails
-    //don't modify the list, and return unsuccessful.
+    //if the memory reallocation fails don't modify the list, and return
+    //unsuccessful.
     if (list_element_value == NULL) {
         return 0;
     }
@@ -402,8 +387,8 @@ unsigned char linked_list_set(struct linked_list* list, size_t index, void* valu
     return 1;
 }
 
-//check whether the list contains a value
-//returns 1 if the value exists in the list. 0 when the value isn't there.
+//check whether the list contains a value returns 1 if the value exists in the
+//list. 0 when the value isn't there.
 unsigned char linked_list_contains(struct linked_list* list, void* value, size_t obj_length) {
     return linked_list_find_value(list, value, obj_length, NULL);
 }
@@ -421,7 +406,7 @@ size_t linked_list_size(struct linked_list* list) {
 struct linked_list* linked_list_clone(struct linked_list* list) {
     //make sure the list to clone exists.
     if (list == NULL) {
-        fprintf(stderr, "Error. Cannot clone a NULL list.\n");
+        fputs("Error. Cannot clone a NULL list.\n", stderr);
     }
     //retrieve list type and length.
     size_t list_length = list->length;
@@ -438,7 +423,8 @@ struct linked_list* linked_list_clone(struct linked_list* list) {
     }
     //add every value in the original list to the new list.
     for (size_t i = 0; i < list_length; i++) {
-        //add to new node in new list. (from the values stored in original_list_current).
+        //add to new node in new list. (from the values stored in
+        //original_list_current).
         linked_list_add(new_list, original_list_current->value, original_list_current->value_length);
         //iterate to the next node in the original list.
         original_list_current = original_list_current->next;
@@ -450,7 +436,7 @@ struct linked_list* linked_list_clone(struct linked_list* list) {
 void linked_list_shuffle(struct linked_list* list) {
     //make sure that the list actually exists.
     if (list == NULL) {
-        fprintf(stderr, "Error. Cannot clone a NULL list.\n");
+        fputs("Error. Cannot clone a NULL list.\n", stderr);
         return;
     }
     //Initiate libsodium, and return on failure.
@@ -466,20 +452,19 @@ void linked_list_shuffle(struct linked_list* list) {
         struct node* current_node = linked_list_get_node(list, i);
         //Make sure that get_node didn't have any issues.
         if (random_list_node == NULL || current_node == NULL) {
-            fprintf(stderr, "Error. Unable to retrieve within bounds nodes in "
-                            "linked_list_shuffle.\n");
+            fputs("Error. Unable to retrieve within bounds nodes in "
+                  "linked_list_shuffle.\n", stderr);
             return;
         }
         //retrieve the value and length of the current node
         void* temp_value = current_node->value;
         size_t temp_val_length = current_node->value_length;
-        //replace the value and length in the current node
-        //with the value and length in the random node.
+        //replace the value and length in the current node with the value and
+        //length in the random node.
         current_node->value = random_list_node->value;
         current_node->value_length = random_list_node->value_length;
-        //replace the value and length in the random node
-        //with the saved value and length that were in
-        //the current_node.
+        //replace the value and length in the random node with the saved value
+        //and length that were in the current_node.
         random_list_node->value = temp_value;
         random_list_node->value_length = temp_val_length;
     }
@@ -489,42 +474,40 @@ void linked_list_shuffle(struct linked_list* list) {
 unsigned char linked_list_remove_at(struct linked_list* list, size_t index) {
     //make sure list exists.
     if (list == NULL) { 
-        fprintf(stderr, "Error. Attempting to remove a value from a NULL list.\n");
+        fputs("Error. Attempting to remove a value from a NULL list.\n", stderr);
         return 0;
     }
     //calculate the maximum value that the index can be.
     size_t max_index_value = list->length - 1;
     //make sure that the index is within the size of the list.
     if (index > max_index_value) {
-        fprintf(stderr, "Error. Attempting to remove at an index out of bounds.\n");
+        fputs("Error. Attempting to remove at an index out of bounds.\n", stderr);
         return 0;
     }
     //copy list head for iteration.
     struct node* list_head = list->head;
     //make sure that the list isn't empty.
     if (list_head == NULL) {
-        fprintf(stderr, "Error. Attempting to remove values from an empty list.");
+        fputs("Error. Attempting to remove values from an empty list.", stderr);
         return 0;
     }
-    //handle removing from list with 1 element.
-    //It is implied that index is also 0, because
-    //index cannot be less than 0; and index is 
-    //less than or equal to max_index_value.
+    //handle removing from list with 1 element. It is implied that index is also
+    //0, because index cannot be less than 0; and index is less than or equal to
+    //max_index_value.
     if (max_index_value == 0) {
         //free only element in the list.
         node_free(list_head);
         list->head = NULL;
-    //Removing the first element in the list
-    //when the list has more than one element.
+    //Removing the first element in the list when the list has more than one
+    //element.
     } else if (index == 0) {
         //replace the head with the next element in the list.
         list->head = list_head->next;
         //free the head element.
         free(list_head);
     } else {
-        //index must be > 0 and <= max_index_value
-        //for code below this comment to execute.
-        //get the element before the one to be removed.
+        //index must be > 0 and <= max_index_value for code below this comment
+        //to execute. get the element before the one to be removed.
         list_head = linked_list_get_node(list, index - 1);
         //get_node must have failed...
         if (list_head == NULL) {
@@ -559,9 +542,8 @@ int linked_list_remove_value(struct linked_list* list, void* value, size_t obj_l
             node_free(temp);
         //equality not at first element.
         } else {
-            //get the node to remove from the list.
-            //we know it exists, otherwise linked_list_find_value
-            //would return 0.
+            //get the node to remove from the list. we know it exists, otherwise
+            //linked_list_find_value would return 0.
             struct node* current = previous->next;
             //jump over current element.
             previous->next = current->next;
@@ -573,8 +555,7 @@ int linked_list_remove_value(struct linked_list* list, void* value, size_t obj_l
         //return successful removal.
         return 1;            
     }
-    //element was not found in the list.
-    //return that removal failed.
+    //element was not found in the list. return that removal failed.
     return 0;
 }
 
@@ -586,8 +567,7 @@ static void print_int(struct node* list_head, size_t length) {
     for (size_t i = 0; i < length; i++) {
         //print out the integer value stored.
         printf("%d", *(int*)list_head->value);
-        //add comma for every element
-        //except the last one.
+        //add comma for every element except the last one.
         if (i < length - 1) {
             printf("%c ", ',');
         }
@@ -600,8 +580,7 @@ static void print_double(struct node* list_head, size_t length) {
     for (size_t i = 0; i < length; i++) {
         //print out the double value stored.
         printf("%f", *(double*)list_head->value);
-        //add comma for every element
-        //except the last one.
+        //add comma for every element except the last one.
         if (i < length - 1) {
             printf("%c ", ',');
         }
@@ -614,8 +593,7 @@ static void print_string(struct node* list_head, size_t length) {
     for (size_t i = 0; i < length; i++) {
         //print out the string value stored.
         printf("%s", (char*)list_head->value);
-        //add comma for every element
-        //except the last one.
+        //add comma for every element except the last one.
         if (i < length - 1) {
             printf("%c ", ',');
         }
@@ -630,11 +608,10 @@ static void print_obj(struct node* list_head, size_t length) {
         unsigned char* current_value_bytes = list_head->value;
         //determine length of element (how many bytes)
         size_t current_value_length = list_head->value_length;
-        //print out each of the bytes in the value.
-        //(As Hex)
+        //print out each of the bytes in the value. (As Hex)
         for (size_t i = 0; i < current_value_length; i++) {
-            //only put colons between hex values.
-            //not at the front or end elements.
+            //only put colons between hex values. not at the front or end
+            //elements.
             if (i > 0 && i < current_value_length - 1) {
                 printf(":");
             }
@@ -659,15 +636,14 @@ static void print_obj(struct node* list_head, size_t length) {
 void linked_list_print(struct linked_list* list) {
     //cannot print a NULL list.
     if (list == NULL) {
-        fprintf(stderr, "Error. Attempting to print out a NULL linked list.\n");
+        fputs("Error. Attempting to print out a NULL linked list.\n", stderr);
         return;
     }
     //make copy of front of list for iteration.
     struct node* current = list->head;
     //retrieve linked list size
     size_t list_size = list->length;
-    //print out the list based
-    //on the type of elements stored.
+    //print out the list based on the type of elements stored.
     switch (list->e_type) {
         case WC_LINKEDLIST_INT: {
             print_int(current, list_size);
