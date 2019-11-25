@@ -76,7 +76,13 @@ unsigned char linked_list_has_next(struct linked_list_iterator* list_it) {
     }
     //Check to see if there is another element in the linked list. If there is
     //an element return 1 otherwise return 0 
-    return (list_it->current_index < list_it->max_index);
+    // handle the case where there is exactly 1 element in the list, and the list
+	// is new.
+	if (list_it->current_index == 0 && list_it->max_index == 0 &&
+	    list_it->is_new == 0)
+		return 1;
+	else
+		return (list_it->current_index < list_it->max_index);
 }
 
 //retrieve the next element in the list; on the first call from a new iterator
@@ -515,6 +521,11 @@ unsigned char linked_list_remove_at(struct linked_list* list, size_t index) {
         }
         //now at the element infront of the one to remove.
         struct node* node_to_free = list_head->next;
+        // make sure the node to free is not the tail of the list.
+		// If it is, set it to the element before it.
+		if (node_to_free == list->tail) {
+			list->tail = list_head;
+		}
         //jump over the element to remove (removing it from the list).
         list_head->next = node_to_free->next;
         //free node that was removed.
