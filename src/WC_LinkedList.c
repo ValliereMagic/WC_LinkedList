@@ -504,7 +504,7 @@ unsigned char linked_list_remove_at(struct linked_list* list, size_t index) {
         //replace the head with the next element in the list.
         list->head = list_head->next;
         //free the head element.
-        free(list_head);
+        node_free(list_head);
     } else {
         //index must be > 0 and <= max_index_value for code below this comment
         //to execute. get the element before the one to be removed.
